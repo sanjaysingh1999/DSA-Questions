@@ -1,0 +1,30 @@
+Example 1:
+
+Input: s = "()"
+Output: true
+
+class Solution {
+    public boolean isValid(String s) {
+     ArrayDeque<Character> stk = new ArrayDeque<>();
+     for(int i=0;i<s.length();i++){
+         if(s.charAt(i)=='(' ||s.charAt(i)=='{' ||s.charAt(i)=='[' ){
+             stk.push(s.charAt(i));
+         }
+         else if(s.charAt(i)==')' ||s.charAt(i)=='}' ||s.charAt(i)==']'){
+         if(stk.isEmpty() || !match(stk.pop(),s.charAt(i))){
+             return false;
+         }
+         }
+     } 
+     if(!stk.isEmpty()){return false;}
+     return true;   
+    }
+    public boolean match(Character char1, Character char2){
+        if( (char1=='[' && char2==']') ||(char1=='('&&char2==')') || (char1=='{'&&char2=='}')){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+}
