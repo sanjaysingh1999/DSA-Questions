@@ -1,0 +1,24 @@
+Description Of Problem : https://leetcode.com/problems/car-fleet/
+
+Idea: Sort acc to position and move from right to left so that car at max postn first goes to stack. if car behind has time<= stk.peek() then don't add it to stack 
+as it will join peek() car somewhere else add it to stack.
+
+import java.util.*;
+class Solution {
+    public int carFleet(int target, int[] position, int[] speed) {
+      Stack <Double> stk = new Stack<>();
+      int arr[][] = new int [position.length][2];
+      for(int i=0;i<position.length;i++){
+          arr[i][0]=position[i];arr[i][1]=speed[i];
+      }  
+      Arrays.sort(arr,java.util.Comparator.comparingInt(o->o[0]));
+      for(int i=position.length-1;i>=0;i--){
+          double currtime = (double) (target-arr[i][0])/arr[i][1];
+          if(!stk.isEmpty() && currtime<=stk.peek()){
+              continue;
+          }
+          stk.push(currtime);  
+      }
+        return stk.size();
+    }
+}
