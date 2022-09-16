@@ -1,0 +1,73 @@
+Idea: 
+maintain a hashmap -> key, node(key,value)
+make 2 dummy node left & right. left.next will always be lru & right.prev MRU
+whenever get or put shift node to right most side
+if after put size>capacity remove leftmost side node
+
+class LRUCache {
+    HashMap<Integer,Node> cache;
+    Node left,right;
+    int capacity;
+    public LRUCache(int capacity) {
+        this.capacity=capacity;
+        cache = new HashMap<>();
+        this.left = new Node(0,0);
+        this.right = new Node(0,0);
+        this.left.next=right;
+        this.right.prev=left;
+    }
+    public int get(int key) {
+       if(cache.containsKey(key)){
+           remove(cache.get(key));
+           insert(cache.get(key));
+           return cache.get(key).val;
+       } 
+        else{
+            return -1;
+        }
+    }
+    
+    public void put(int key, int value) {
+       if(cache.containsKey(key)){
+           remove(cache.get(key));
+       } 
+       cache.put(key,new Node(key,value));
+        insert(cache.get(key));
+        if(cache.size()>capacity){
+            Node lru = this.left.next;
+            remove(lru);
+            cache.remove(lru.key);
+        }
+    }
+    //remove links of node
+    public void remove(Node node){
+        Node prev = node.prev;Node next = node.next;
+        prev.next = next;next.prev=prev;
+    }
+    //insert node at right
+    public void insert(Node node){
+        Node next = this.right;
+        Node prev = this.right.prev;//prev is just left of right
+        
+        prev.next = node;
+        node.next=next;
+        node.prev=prev;
+        next.prev=node;
+        
+    }
+   
+    class Node{
+        Node prev,next;
+        int key,val;
+        public Node(int key,int val){
+            this.key=key;this.val=val;
+        }
+    }
+}
+
+/**
+ * Your LRUCache object will be instantiated and called as such:
+ * LRUCache obj = new LRUCache(capacity);
+ * int param_1 = obj.get(key);
+ * obj.put(key,value);
+ */
