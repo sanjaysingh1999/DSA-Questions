@@ -1,0 +1,35 @@
+Example 1:
+
+
+Input: root = [3,9,20,null,null,15,7]
+Output: true
+
+Idea: do dfs then compute bool val based on prev res & curr height diff and return that
+
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public Boolean isBalanced(TreeNode root) {
+        return dfs(root).getKey();
+    }
+    public Pair<Boolean,Integer> dfs(TreeNode root){
+        if(root==null) return new Pair(true,0);
+        var left = dfs(root.left);
+        var right = dfs(root.right);
+        boolean res= (left.getKey()&& right.getKey() && Math.abs(left.getValue()-right.getValue())<=1);
+        return new Pair<Boolean,Integer> (res,1+Math.max(left.getValue(),right.getValue()));
+    }
+}
