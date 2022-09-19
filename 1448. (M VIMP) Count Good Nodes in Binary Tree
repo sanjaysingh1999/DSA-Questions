@@ -1,0 +1,44 @@
+Given a binary tree root, a node X in the tree is named good if in the path from root to X there are no nodes with a value greater than X.
+
+Return the number of good nodes in the binary tree. 
+
+Example 1:
+
+Input: root = [3,1,4,3,null,1,5]
+Output: 4
+Explanation: Nodes in blue are good.
+Root Node (3) is always a good node.
+Node 4 -> (3,4) is the maximum value in the path starting from the root.
+Node 5 -> (3,4,5) is the maximum value in the path
+Node 3 -> (3,1,3) is the maximum value in the path.
+
+Idea: Do preorder (R-L-Right) traversal. pass max of curr_max,node.val to next call . check if curr node val>=max_val then inc res
+
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public int goodNodes(TreeNode root) {
+         return preorder(root,Integer.MIN_VALUE);   
+    }
+    public int preorder(TreeNode root,int max_val){
+        if(root==null) return 0;
+        int count=0;
+        if(root.val>=max_val)count=1;
+         count +=preorder(root.left,Math.max(root.val,max_val));
+         count +=preorder(root.right,Math.max(root.val,max_val));
+        return count;
+    }
+}
