@@ -1,0 +1,53 @@
+Input: root = [3,1,4,null,2], k = 1
+Output: 1
+
+Idea : Inorder traversal add then from bottom to array.
+
+with arraylist
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public int kthSmallest(TreeNode root, int k) {
+        ArrayList<Integer> arr = new ArrayList<>();
+        inorder(root,k,arr) ;
+        return arr.get(k-1);
+    }
+    public TreeNode inorder(TreeNode root,int k,ArrayList arr){
+        if(root==null)return null;
+        inorder(root.left,k,arr);
+        arr.add(root.val);
+        inorder(root.right,k,arr);
+        
+    }
+}
+
+optimal: with array of size k
+class Solution {
+    public int kthSmallest(TreeNode root, int k) {
+        int arr[] = new int[k];
+        inorder(root,k,arr) ;
+        return arr[k-1];
+    }
+    int index=0;
+    public void inorder(TreeNode root,int k,int arr[]){
+        if(root==null)return ;
+        inorder(root.left,k,arr);
+        if(index==k)return;
+        arr[index]=root.val;index++;
+        inorder(root.right,k,arr);
+        
+    }
+}
