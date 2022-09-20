@@ -1,0 +1,24 @@
+Idea: maintain a min heap of size k. if val to be added is > then peek (i.e min val till now is peek) then poll & add 
+
+class KthLargest {
+  PriorityQueue <Integer> min_heap = new PriorityQueue<>();
+    int k;
+    public KthLargest(int k, int[] nums) {
+        this.k=k;
+        for(int n:nums) add(n);
+    }
+    
+    public int add(int val) {
+        if(min_heap.size()<k)min_heap.offer(val);
+        else if(val>min_heap.peek()){
+            min_heap.poll();min_heap.add(val);
+        }
+        return min_heap.peek();
+    }
+}
+
+/**
+ * Your KthLargest object will be instantiated and called as such:
+ * KthLargest obj = new KthLargest(k, nums);
+ * int param_1 = obj.add(val);
+ */
