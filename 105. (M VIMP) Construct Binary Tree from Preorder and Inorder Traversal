@@ -1,0 +1,34 @@
+Idea; create HM of inorder val,index . for root node find its pos in map and left of root would be inorder_low to pos-1 & 
+similarly for right it would be mid+1 to ino_high
+
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    HashMap<Integer,Integer> inorder_pos = new HashMap<>();
+    public TreeNode buildTree(int[] preorder, int[] inorder) {
+        for(int i=0;i<inorder.length;i++){inorder_pos.put(inorder[i],i);}
+       return builder(preorder,inorder,0,0,inorder.length-1) ;
+    }
+    public TreeNode builder(int preorder[],int inorder[], int preo_index,int ino_low,int ino_high){
+        if(ino_low>ino_high || preo_index>preorder.length-1) return null;
+        int val = preorder[preo_index];
+        int mid = inorder_pos.get(val);
+        TreeNode n = new TreeNode(val);
+        n.left=builder(preorder,inorder,preo_index+1,ino_low,mid-1);
+        n.right=builder(preorder,inorder,(preo_index+1+mid-ino_low),mid+1,ino_high);
+        return n;
+    }
+}
