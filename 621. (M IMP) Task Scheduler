@@ -1,0 +1,35 @@
+iven a characters array tasks, representing the tasks a CPU needs to do, where each letter represents a different task. Tasks could be done in any order. Each task is done in one unit of time. For each unit of time, the CPU could complete either one task or just be idle.
+
+However, there is a non-negative integer n that represents the cooldown period between two same tasks (the same letter in the array), that is that there must be at least n units of time between any two same tasks.
+
+Return the least number of units of times that the CPU will take to finish all the given tasks.
+
+Input: tasks = ["A","A","A","B","B","B"], n = 2
+Output: 8
+Explanation: 
+A -> B -> idle -> A -> B -> idle -> A -> B
+There is at least 2 units of time between any two same tasks.
+
+Idea: maintain a maxheap where we store freq of each char and process max freq at a time. we reduce its freq and add it to queue with time+n(next time it is available)
+
+class Solution {
+    public int leastInterval(char[] tasks, int n) {
+      PriorityQueue<Integer> maxheap = new PriorityQueue<Integer>((a,b)->b-a);
+      ArrayDeque <Pair<Integer,Integer>> queue = new ArrayDeque <> ();
+      int arr[]= new int[26];  
+      for(char c:tasks) arr[c-'A']++;
+      for(int val:arr){if(val>0) maxheap.offer(val);}  
+       int time=0; 
+      while(!maxheap.isEmpty() || !queue.isEmpty())  {
+          time++;
+          if(!maxheap.isEmpty() ){
+              int val = maxheap.poll();
+              val--;
+              if(val>0)queue.add(new Pair(val,n+time));
+          }
+          if(!queue.isEmpty() && time==queue.peek().getValue()){
+              maxheap.add(queue.poll().getKey());
+          }
+      }return time;
+    }
+}
