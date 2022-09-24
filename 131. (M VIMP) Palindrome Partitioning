@@ -1,0 +1,45 @@
+
+Add to List
+
+Share
+Given a string s, partition s such that every substring of the partition is a palindrome. Return all possible palindrome partitioning of s.
+
+A palindrome string is a string that reads the same backward as forward.
+
+ 
+
+Example 1:
+
+Input: s = "aab"
+Output: [["a","a","b"],["aa","b"]]
+Example 2:
+
+Input: s = "a"
+Output: [["a"]]
+
+IDea: make partition at every locatn if it makes it palindrom. inc partition towards right recusively.
+
+class Solution {
+    public List<List<String>> partition(String s) {
+    List<List<String>> res = new ArrayList<>();
+        if(s.equals("")){
+             res.add(new ArrayList<String>());
+            return res;
+        }
+        for(int i=0;i<s.length();i++){
+            if(palindrom(s,i+1)){
+                for(List<String> list :partition(s.substring(i+1))){
+                    list.add(0,s.substring(0,i+1));
+                    res.add(list);
+                }
+            }
+        }
+        return res;
+    }
+    public boolean palindrom(String s , int n){
+        for(int i=0;i<n/2;i++){
+            if(s.charAt(i)!=s.charAt(n-1-i)) return false;
+        }
+        return true;
+    }
+}
