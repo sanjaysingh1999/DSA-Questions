@@ -1,0 +1,26 @@
+Desc: https://leetcode.com/problems/letter-combinations-of-a-phone-number/
+
+Idea: Make map of each digit - string. Then for each number get its first char then combine with 1st char of rem no.s then with 2nd no.s. 
+repeat this for rem letters of first no.
+
+class Solution {
+    public List<String> letterCombinations(String digits) {
+        if(digits.length()==0)return new ArrayList<>();
+       List<String> res = new ArrayList<>();
+       Map<Character,String> map = Map.of(
+       '2',"abc",'3',"def",'4',"ghi",'5',"jkl",'6',"mno",'7',"pqrs",'8',"tuv",'9',"wxyz");
+        backtrack(digits,map,res,"",0);
+        return res;
+    }
+    public void backtrack(String digits,Map<Character,String> map,List<String> res,String temp,int curr){
+        
+     if(temp.length()==digits.length()) {res.add(temp);return ;}
+     else{
+      String letter = map.get(digits.charAt(curr));
+      for(Character c:letter.toCharArray()){
+          backtrack(digits,map,res,temp+c,curr+1);
+      }
+     }
+      
+    }
+}
