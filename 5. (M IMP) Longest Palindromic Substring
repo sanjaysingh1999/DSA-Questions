@@ -1,0 +1,60 @@
+Given a string s, return the longest palindromic substring in s.
+
+A string is called a palindrome string if the reverse of that string is the same as the original string. 
+Example 1:
+
+Input: s = "babad"
+Output: "bab"
+Explanation: "aba" is also a valid answer.
+
+Idea: move outwards from every element [consider it as middle] and hceck if neighbor are same or not.
+
+O[n ^2] <-optimal solution
+
+class Solution {
+    public String longestPalindrome(String s) {
+       int n = s.length();
+        if(n==1) return s;
+        String res="";int resl=0;
+        //[ Stretch from middle to left,right extreme]
+        for(int i=0;i<n;i++){
+            //odd length 
+            int left=i,right=i;
+            while(left>=0 && right<n && s.charAt(left)==s.charAt(right)){
+                if(resl<right-left+1){resl=right-left+1;res=s.substring(left,right+1);}
+                left-=1;right+=1;
+            }    
+        //even length
+            left=i;right=i+1;
+            while(left>=0 && right<n && s.charAt(left)==s.charAt(right)){
+                if(resl<right-left+1){resl=right-left+1;res=s.substring(left,right+1);}
+                left-=1;right+=1;
+            }    
+        }
+            
+        return res;
+    }
+}
+
+// Solution with use of method
+class Solution {
+    String res="";int resl=0;
+    public String longestPalindrome(String s) {
+       int n = s.length();
+        if(n==1) return s;
+        //[ Stretch from middle to left,right extreme]
+        for(int i=0;i<n;i++){
+            //odd length 
+             palindString(i,i,s,n);
+            //even length
+            palindString(i,i+1,s,n);
+        }
+        return res;
+    }
+    public void palindString(int left,int right,String s,int n){
+        while(left>=0 && right<n && s.charAt(left)==s.charAt(right)){
+                if(resl<right-left+1){resl=right-left+1;res=s.substring(left,right+1);}
+                left-=1;right+=1;
+            }
+    }
+}
