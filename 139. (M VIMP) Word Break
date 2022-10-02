@@ -1,0 +1,30 @@
+Given a string s and a dictionary of strings wordDict, return true if s can be segmented into a space-separated sequence of one or more dictionary words.
+
+Note that the same word in the dictionary may be reused multiple times in the segmentation. 
+Example 1:
+
+Input: s = "leetcode", wordDict = ["leet","code"]
+Output: true
+Explanation: Return true because "leetcode" can be segmented as "leet code".
+Idea: Dp. Create reverse order dp & check at each char to len of word in dict -> if < len of string && equals word then make its 
+dp[i] = dp[i+word.length()] <- reason to get before computed dp value so that at last index 0 will have not onlt its check but also others too
+
+O(n X m X n) n->len string m->length of dict
+
+class Solution {
+    public boolean wordBreak(String s, List<String> wordDict) {
+        boolean [] dp = new boolean[s.length()+1];
+        dp[s.length()]=true;
+        for(int i=s.length()-1;i>=0;i--){
+            for(String word:wordDict){
+                if( ((i+word.length()) <=s.length())
+                     && (s.substring(i,i+word.length()).equals(word)) ){
+                    dp[i] = dp[i+word.length()];
+                }
+                if(dp[i]){break;}
+            }
+        }
+        return dp[0];
+        
+    }
+}
