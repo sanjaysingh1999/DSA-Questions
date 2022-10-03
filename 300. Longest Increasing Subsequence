@@ -1,0 +1,30 @@
+Given an integer array nums, return the length of the longest strictly increasing subsequence.
+
+A subsequence is a sequence that can be derived from an array by deleting some or no elements without changing the order of the remaining elements.
+For example, [3,6,2,7] is a subsequence of the array [0,3,1,6,2,2,7].
+
+Example 1:
+
+Input: nums = [10,9,2,5,3,7,101,18]
+Output: 4
+Explanation: The longest increasing subsequence is [2,3,7,101], therefore the length is 4.
+
+Idea: From right side maintain a dp of LIS from that particular element till last. Criteria for dp if element if > then curr then add its lis & move to right. 
+LIS of last element is always 1
+
+O(N ^2)
+class Solution {
+    public int lengthOfLIS(int[] nums) {
+        int lis[] = new int[nums.length];int res=1;
+        Arrays.fill(lis,1);
+        for(int i=nums.length-2;i>=0;i--){
+            for(int j=i+1;j<nums.length;j++){
+                if(nums[j]>nums[i]){
+                    lis[i]=Math.max(lis[i],1+lis[j]);
+                }
+            }
+            res=Math.max(res,lis[i]);
+        }
+        return res;
+    }
+}
