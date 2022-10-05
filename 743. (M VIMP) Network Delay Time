@@ -1,0 +1,40 @@
+Idea: Create a adjlist for each node,[weight,connected_node]. Then from starting node add connected node to minheap on basis of weight along with prev weight so that 
+we can get weight from starting node. Keep doing this till minh is non empty.
+
+TC: O( E x Log V^2)  SC:O(V^2) ----   TC Reason as-> E:V^2 max edges can be V^2.
+class Solution {
+    public int networkDelayTime(int[][] times, int n, int k) {
+        HashMap<Integer,List<int[]>> map = new HashMap<>();
+        
+        for(int[] time: times){
+            int node = time[0]; int next=time[1]; int weight=time[2];
+            List<int[]> list = map.getOrDefault(node,new ArrayList<>());
+            list.add(new int[] {weight,next});
+            map.put(node,list);
+        }
+        PriorityQueue<int[]> minh = new PriorityQueue<>((a,b)->a[0]-b[0]);
+        HashSet<Integer> visited = new HashSet<>();
+        minh.offer(new int[]{0,k}); //weight,node
+        int res=0;
+        while(!minh.isEmpty()){
+            int [] arr = minh.poll();
+            int currnode=arr[1]; 
+            if(visited.contains(currnode))continue;
+            int weight = arr[0]; visited.add(currnode);
+            res=Math.max(res,weight);
+            List<int []> l1 = new ArrayList<>();
+            if(map.containsKey(currnode)){
+                l1=map.get(currnode);
+            }
+            for(int [] adjnode: l1){
+                int w = adjnode[0] ;int nextnode = adjnode[1];
+                if(!visited.contains(nextnode)){
+                minh.add(new int[]{weight+w,nextnode});
+                }
+            }
+        }
+        return visited.size()==n? res:-1;
+        
+        
+    }
+}
