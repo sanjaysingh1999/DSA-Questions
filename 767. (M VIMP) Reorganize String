@@ -1,0 +1,33 @@
+Given a string s, rearrange the characters of s so that any two adjacent characters are not the same.
+
+Return any possible rearrangement of s or return "" if not possible.
+
+Example 1:
+
+Input: s = "aab"
+Output: "aba"
+
+Idea: Get most freq char from map and add it to res then next time get max freq char from rest buy not selecting this char (save it in prev & add later)
+
+TC: O(nlogn) SC: O(n)
+
+class Solution {
+    public String reorganizeString(String s) {
+        HashMap<Character,Integer> map = new HashMap<>(); // Store char:freq
+        for(Character c:s.toCharArray()){map.put(c,map.getOrDefault(c,0)+1);}
+        
+        PriorityQueue<Character> maxh = new PriorityQueue<>((a,b) ->map.get(b) - map.get(a)); //to get max freq one
+        maxh.addAll(map.keySet());
+        Character prev = null;
+        String res="";
+        while(!maxh.isEmpty() || prev!=null){
+            if(prev!=null && maxh.isEmpty()){return "";}
+            Character c =maxh.poll(); int count = map.get(c)-1;
+            map.put(c,count) ;
+            res  = res+c ;
+            if(prev!=null)  maxh.add(prev); prev=null;
+            if(count!=0) prev = c;
+        }
+        return res;
+    }
+}
