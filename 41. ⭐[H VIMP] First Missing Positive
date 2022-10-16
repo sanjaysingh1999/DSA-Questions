@@ -1,0 +1,39 @@
+Brute: TC O(n) SC:O(n)
+Idea: Soln is b/w 1 to len(array)+1 ex:[1,2,3] so ans 4
+class Solution {
+    public int firstMissingPositive(int[] nums) {
+        HashSet<Integer> Set = new HashSet<>();
+        for(int n:nums) if(n!=0){Set.add(n);}
+        for(int i=1;i<=nums.length+1;i++){
+            if(!Set.contains(i)) return i;
+        }
+        return 0;
+    }
+}
+
+Optimal: TC:O(n) SC:O(1)
+Idea: Same as above just that marking elements in array itself. taking nums[i]-1 and making it -ve to show its present. it index comes out to be 0 then make it len+1
+return one with val >=0
+
+class Solution {
+    public int firstMissingPositive(int[] nums) {
+        for(int i=0;i<nums.length;i++){
+            if(nums[i]<0){nums[i]=0;}
+        }
+        for(int i=0;i<nums.length;i++){
+            int index = Math.abs(nums[i])-1;
+            if(index<0||index>nums.length-1){continue;} // index out of bound
+            if(nums[index]>0){
+             nums[index] = -1*nums[index];
+            }
+            else if(nums[index]==0){
+             nums[index] = -1*(nums.length+1); // marking place with already 0
+            }
+            
+        }
+        for(int i=1;i<=nums.length;i++){
+            if(nums[i-1]>=0 ) return i;
+        }
+        return nums.length+1;
+    }
+}
