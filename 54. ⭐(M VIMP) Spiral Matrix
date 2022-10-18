@@ -1,0 +1,38 @@
+Given an m x n matrix, return all elements of the matrix in spiral order.
+
+Example 1:
+
+Input: matrix = [[1,2,3],[4,5,6],[7,8,9]]
+Output: [1,2,3,6,9,8,7,4,5]
+Idea: Create a imaginary boundar ( top, right , bottom, left) print from left to right and inc top boundary as it has been changed. 
+Similarly print from top to bottom and change right boundary. Print right to left and change bottom boundary but before check if it is only 
+single row input. Similaryly print bottom to top and change it left boundary but before check if it is single col input 
+
+TC: O(r x c)
+class Solution {
+    public List<Integer> spiralOrder(int[][] matrix) {
+        int top=0,right=matrix[0].length-1,left=0,bottom=matrix.length-1;
+        List<Integer> res = new ArrayList<>();
+        while(right>=left && top<=bottom){
+            for(int i=left;i<=right;i++){
+                res.add(matrix[top][i]);
+            }top++;
+            
+            for(int i=top;i<=bottom;i++){
+                res.add(matrix[i][right]);
+            }right--;
+            
+            if(top<=bottom){ // check for single row
+                for(int i=right;i>=left;i--){
+                res.add(matrix[bottom][i]);
+            }bottom--;
+            }
+            if(right>=left){ // check for single col
+                for(int i=bottom;i>=top;i--){
+                res.add(matrix[i][left]);
+            }left++;
+            }
+        }
+        return res;
+    }
+}
