@@ -1,0 +1,38 @@
+
+In an alien language, surprisingly, they also use English lowercase letters, but possibly in a different order. 
+The order of the alphabet is some permutation of lowercase letters.
+
+Given a sequence of words written in the alien language, and the order of the alphabet, return true if and only if the given 
+words are sorted lexicographically in this alien language.
+
+Example 1:
+
+Input: words = ["hello","leetcode"], order = "hlabcdefgijkmnopqrstuvwxyz"
+Output: true
+Explanation: As 'h' comes before 'l' in this language, then the sequence is sorted.
+
+Idea: Create order map as per given order. If first word is small while comparing two words then it is ok & reverse in not ok. compare two words letter by letter if
+order acc to map if not corrrect return false;
+
+TC: O(total chars in words) SC:O(total chars in order)
+
+class Solution {
+    public boolean isAlienSorted(String[] words, String order) {
+        HashMap<Character,Integer> map = new HashMap<>(); // map order of chars
+        for(int i=0;i<order.length();i++){
+            map.put(order.charAt(i),i);
+        }
+        for(int i=0;i<words.length-1;i++){
+            String w1 = words[i]; String w2 = words[i+1];
+            for(int j=0;j<w1.length();j++){//word 1 can be small (allowed)
+                if(j==w2.length()) return false;
+                    if(w1.charAt(j)!=w2.charAt(j)){ // diff letter
+                        if(map.get(w1.charAt(j))>map.get(w2.charAt(j)))  return false; 
+                        // order not correct
+                        break;
+                    }
+            }
+        }
+        return true;
+    }
+}
