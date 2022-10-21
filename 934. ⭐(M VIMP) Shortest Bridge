@@ -1,0 +1,70 @@
+You are given an n x n binary matrix grid where 1 represents land and 0 represents water.
+
+An island is a 4-directionally connected group of 1's not connected to any other 1's. There are exactly two islands in grid.
+
+You may change 0's to 1's to connect the two islands to form one island.
+
+Return the smallest number of 0's you must flip to connect the two islands.
+
+ 
+
+Example 1:
+
+Input: grid = [[0,1],[1,0]]
+Output: 1
+Idea: Do dfs and mark island one as visited & add its position into queue to do bfs around it. Do bfs around island 1 and find island to .. keep count of moves 
+by each time your queue empties for before added elements inc moves(i.e bridge size).
+
+Tc : O(n ^2) SC: O(n^2)
+
+class Solution {
+    public int shortestBridge(int[][] grid) {
+        int n= grid.length,found=0;
+        Deque<int []> q = new ArrayDeque<>();
+        
+        int [][] dirs = new int [][] {{1,0},{-1,0},{0,1},{0,-1}};
+        for(int i=0;i<n;i++){
+            if(found==1){break;}
+            for(int j=0;j<n;j++){
+                if(grid[i][j]==1){
+                    found=1;
+                    
+                    dfs(grid,i,j,q,dirs);
+                    break;
+                }
+            }
+           
+        }
+        
+        //bfs to find neighbouring island i.e. 1
+        int moves=0;
+        while(!q.isEmpty()){ // bfs
+           int len = q.size();
+            while(len-->0){
+                int[] pos = q.poll();
+                for(int [] dir:dirs){
+                 int i = pos[0] + dir[0];
+                 int j = pos[1] + dir[1];
+                if(i>=0 && j>=0 && i<n && j<n && grid[i][j]!=2){
+                    if(grid[i][j] == 1){return moves;}
+                    q.offer(new int[]{i,j});
+                    grid[i][j]=2;
+                    }
+                }
+            }
+            moves++;
+        }
+    
+        return -1;
+    }
+    public void dfs(int[][] grid,int i,int j, Deque <int[]> q, int [][] dirs){
+      if(i<0 || j<0 || i>=grid.length || j>=grid.length || grid[i][j]==0 || grid[i][j]==2)
+      {return ;}
+      grid[i][j]=2;
+      q.offer(new int[] {i,j});
+      for(int[] dir:dirs){
+          dfs(grid,i+dir[0],j+dir[1],q,dirs);
+      }
+    }
+    
+}
