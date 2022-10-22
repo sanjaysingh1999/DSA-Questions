@@ -1,0 +1,48 @@
+There is a directed graph of n nodes with each node labeled from 0 to n - 1. The graph is represented by a 0-indexed 2D integer array graph 
+where graph[i] is an integer array of nodes adjacent to node i, meaning there is an edge from node i to each node in graph[i].
+
+A node is a terminal node if there are no outgoing edges. A node is a safe node if every possible path starting from that node leads to a terminal node
+(or another safe node).
+
+Return an array containing all the safe nodes of the graph. The answer should be sorted in ascending order.
+
+Example 1:
+
+Illustration of graph
+Input: graph = [[1,2],[2,3],[5],[0],[5],[],[]]
+Output: [2,4,5,6]
+Explanation: The given graph is shown above.
+Nodes 5 and 6 are terminal nodes as there are no outgoing edges from either of them.
+Every path starting at nodes 2, 4, 5, and 6 all lead to either node 5 or 6.
+
+Idea: Do dfs on node starting from zero then to its neighbours . Add node as notsafe intially to map and then if its neighbour cycles to it then mark it as unsafe &
+return false; else if all its neighbour are safe then mark it safe too. Mark safe node which are null too.
+
+TC: O(E x V) SC: O(E x V)
+class Solution {
+    List <Integer> res = new ArrayList<>();
+    public List<Integer> eventualSafeNodes(int[][] graph) {
+        HashMap<Integer,Boolean> safeOrnot = new HashMap<>();
+        for(int i=0;i<graph.length;i++){
+            if(dfs(graph,i,safeOrnot)){
+                res.add(i);
+            }
+        }
+      
+      return res;
+    }
+    public boolean dfs(int [][]graph,int i,HashMap<Integer,Boolean>safeOrnot){
+        if(safeOrnot.containsKey(i)){
+            return safeOrnot.get(i);
+        }
+        safeOrnot.put(i,false);
+        for(int j: graph[i]){
+            if(!dfs(graph,j,safeOrnot)){
+                safeOrnot.put(j,false);
+                return false;
+            }
+        }
+        safeOrnot.put(i,true);   
+        return true;
+    }
+}
