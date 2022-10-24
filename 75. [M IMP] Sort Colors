@@ -1,0 +1,43 @@
+
+Brute: Two pass solution
+Idea: Use bucket technique and create map of freq of each num & accordingly replace numbers in array.
+TC: O(n) SC:O(1)
+class Solution {
+    public void sortColors(int[] nums) {
+       HashMap<Integer,Integer> map = new HashMap<>();
+       for(int i=0;i<nums.length;i++){
+           map.put(nums[i],map.getOrDefault(nums[i],0)+1);
+       }
+        int index=0;
+        for(int i=0;i<3;i++){
+            if(!map.containsKey(i)){continue;}
+            int count = map.get(i);
+            while(count>0){nums[index]=i;index++;count--;}
+          }
+    }
+}
+
+Efficient: one pass [ Partition ]
+Idea: Use left ptr to store all 0s and right ptr to 2s . if swap of 2 with right then don't inc i as that may lead to 0s in middle.
+TC:O(n) SC:O(1)
+
+class Solution {
+    public void sortColors(int[] nums) {
+      int left=0,right=nums.length-1,i=0;
+      while(i<=right){
+          if(nums[i]==0){
+              int temp = nums[left];
+              nums[left]=nums[i]; 
+              nums[i]=temp ;  left++;
+          }
+          else if(nums[i]==2){
+              int temp = nums[right];
+              nums[right]=nums[i];
+              nums[i]=temp; right--;
+              i--;  
+    // to ensure right side 0,1 after swap doesn't remain in middle with i going forward   
+          }
+          i++;
+      }
+    }
+}
