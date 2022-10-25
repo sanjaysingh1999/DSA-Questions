@@ -1,0 +1,26 @@
+Given a string s, return true if the s can be palindrome after deleting at most one character from it.
+
+Example 1:
+
+Input: s = "aba"
+Output: true
+Idea: Check for palindrome from left and right ptr and if diff then check if left to right-1 || left+1 to right if any if these are palindrom then fine otherwise false
+
+class Solution {
+    public boolean validPalindrome(String s) {
+        int left=0,right=s.length()-1;
+        while(left<=right){
+            if(s.charAt(left)==s.charAt(right)){left++;right--;}
+            else return isPalin(s,left+1,right) || isPalin(s,left,right-1);
+            
+        }
+        return true;
+    }
+    public boolean isPalin(String s,int left,int right){
+        while(left<=right){
+            if(s.charAt(left)==s.charAt(right)){left++;right--;}
+            else{return false;}
+        }
+        return true;
+    }
+}
