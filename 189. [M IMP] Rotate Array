@@ -1,0 +1,30 @@
+Given an array, rotate the array to the right by k steps, where k is non-negative. 
+
+Example 1:
+
+Input: nums = [1,2,3,4,5,6,7], k = 3
+Output: [5,6,7,1,2,3,4]
+Explanation:
+rotate 1 steps to the right: [7,1,2,3,4,5,6]
+rotate 2 steps to the right: [6,7,1,2,3,4,5]
+rotate 3 steps to the right: [5,6,7,1,2,3,4]
+
+Idea: Rotate array then rotate first k elements then rest. if k>nums length reduce it k=k-nums.length.
+
+TC: theta(n) sC:O(1)
+class Solution {
+    public void rotate(int[] nums, int k) {
+       while(k>nums.length) {k-=nums.length;} // k>length so making it small
+       reverse(nums,0,nums.length-1); // reversed array
+       reverse(nums,0,k-1); //reverse first k elements
+        reverse(nums,k,nums.length-1);  // reverse rest 
+    }
+    public void reverse(int []nums,int l,int r){//reversing array
+       while(l<r){ 
+            int temp = nums[l];
+            nums[l] = nums[r];
+            nums[r]=temp;
+            r--;l++;
+        } 
+    }
+}
