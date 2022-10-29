@@ -1,0 +1,50 @@
+You are keeping the scores for a baseball game with strange rules. At the beginning of the game, you start with an empty record.
+
+You are given a list of strings operations, where operations[i] is the ith operation you must apply to the record and is one of the following:
+
+An integer x.
+Record a new score of x.
+'+'.
+Record a new score that is the sum of the previous two scores.
+'D'.
+Record a new score that is the double of the previous score.
+'C'.
+Invalidate the previous score, removing it from the record.
+Return the sum of all the scores on the record after applying all the operations.
+
+The test cases are generated such that the answer and all intermediate calculations fit in a 32-bit integer and that all operations are valid.
+
+ 
+
+Example 1:
+
+Input: ops = ["5","2","C","D","+"]
+Output: 30
+Explanation:
+"5" - Add 5 to the record, record is now [5].
+"2" - Add 2 to the record, record is now [5, 2].
+"C" - Invalidate and remove the previous score, record is now [5].
+"D" - Add 2 * 5 = 10 to the record, record is now [5, 10].
+"+" - Add 5 + 10 = 15 to the record, record is now [5, 10, 15].
+The total sum is 5 + 10 + 15 = 30.
+
+Idea: Do as given in problem
+
+class Solution {
+    public int calPoints(String[] operations) {
+        ArrayDeque<Integer> stk = new ArrayDeque<>();
+        for(String c:operations){
+            if(c.equals("+") & !stk.isEmpty()){
+                int sum=0;
+                int n1=stk.pop(), n2=stk.pop();
+                sum=n1+n2; stk.push(n2);stk.push(n1); stk.push(sum);
+            }
+            else if(c.equals("D") & !stk.isEmpty()){stk.push(stk.peek()*2);}
+            else if(c.equals("C") & !stk.isEmpty()){stk.pop();}
+            else{stk.push(Integer.parseInt(c));}
+        }
+        int res=0;
+        while(!stk.isEmpty()){res+=stk.pop();}
+        return res;
+    }
+}
