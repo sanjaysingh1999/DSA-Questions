@@ -1,0 +1,38 @@
+We are given an array asteroids of integers representing asteroids in a row.
+
+For each asteroid, the absolute value represents its size, and the sign represents its direction (positive meaning right, negative meaning left). E
+ach asteroid moves at the same speed.
+
+Find out the state of the asteroids after all collisions. If two asteroids meet, the smaller one will explode. If both are the same size, both will explode. 
+Two asteroids moving in the same direction will never meet.
+
+Example 1:
+
+Input: asteroids = [5,10,-5]
+Output: [5,10]
+Explanation: The 10 and -5 collide resulting in 10. The 5 and 10 never collide.
+
+Idea: Collision only if top stack +ve and element -ve. Check if diff >0 then element distroy if diff<0 then top of stack distoy else diff==0 both distroy.
+
+TC: O(n) SC:O(n)
+
+class Solution {
+    public int[] asteroidCollision(int[] asteroids) {
+        ArrayDeque <Integer> stk = new ArrayDeque<>(); // stack to have +ve nums
+        for(int a:asteroids){
+            while(!stk.isEmpty() && stk.peek()>0 && a<0){
+                int diff = stk.peek() + a;
+                if(diff<0){stk.pop();}
+                else if(diff==0){stk.pop();a=0;}
+                else{a=0;}
+            }
+            if(a!=0){stk.push(a);}
+        }
+        int size=stk.size();
+        int res [] = new int[size];
+        for(int i=size-1;i>=0;i--){
+            res[i]=stk.pop();
+        }
+        return res;
+    }
+}
