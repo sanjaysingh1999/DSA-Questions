@@ -1,0 +1,35 @@
+The frequency of an element is the number of times it occurs in an array.
+
+You are given an integer array nums and an integer k. In one operation, you can choose an index of nums and increment the element at that index by 1.
+
+Return the maximum possible frequency of an element after performing at most k operations. 
+
+Example 1:
+
+Input: nums = [1,2,4], k = 5
+Output: 3
+Explanation: Increment the first element three times and the second element two times to make nums = [4,4,4].
+4 has a frequency of 3.
+
+sliding window
+Idea: think of right ptr element as most freq and check how much it would take to make all element in window = right ptr element. Using this if not possible inc left
+ptr and remove total of window element. otherwise if all good inc right ptr and check again if we have enough budget to make rest element = right ptr element.
+
+TC: O(nlogn) SC:O(1)
+
+class Solution {
+    public int maxFrequency(int[] nums, int k) {
+        int l=0,r=0,res=Integer.MIN_VALUE;
+        long total=0;
+        Arrays.sort(nums);
+        while(r<nums.length){
+            total+=nums[r];
+            while((nums[r]*(r-l+1))>total+k){
+                total-=nums[l];l++;
+            }
+            res=Math.max(res,r-l+1);
+            r++;
+        }
+        return res;
+    }
+}
