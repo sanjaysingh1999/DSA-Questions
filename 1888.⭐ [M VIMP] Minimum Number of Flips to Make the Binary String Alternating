@@ -1,0 +1,49 @@
+You are given a binary string s. You are allowed to perform two types of operations on the string in any sequence:
+
+Type-1: Remove the character at the start of the string s and append it to the end of the string.
+Type-2: Pick any character in s and flip its value, i.e., if its value is '0' it becomes '1' and vice-versa.
+Return the minimum number of type-2 operations you need to perform such that s becomes alternating.
+
+The string is called alternating if no two adjacent characters are equal.
+
+For example, the strings "010" and "1010" are alternating, while the string "0100" is not.
+ 
+
+Example 1:
+
+Input: s = "111000"
+Output: 2
+Explanation: Use the first operation two times to make s = "100011".
+Then, use the second operation on the third and sixth elements to make s = "101010".
+
+Idea: Compare string with 010101.. and 101010.. and find which has min diff. instead of shifting 1st char to end attach string with itself .
+
+TC:O(2n) SC:(2n)
+
+class Solution {
+    public int minFlips(String s) {
+        int n =s.length();
+        s = s+s;
+        char s2[] = s.toCharArray();
+        char[] alt1=new char[n+n];char[] alt2=new char[n+n];
+        for(int i=0;i<s.length();i++){
+            if(i%2==0){alt1[i]='1';alt2[i]='0';}
+            else{alt1[i]='0';alt2[i]='1';}
+        }
+        int l=0,res=s.length(),diff1=0,diff2=0;
+        for(int r=0;r<n+n;r++){
+            if(s2[r]!=alt1[r]){diff1++;}
+            if(s2[r]!=alt2[r]){diff2++;}
+            
+            if(r-l+1>n){
+                if(s2[l]!=alt1[l]){diff1--;}
+                if(s2[l]!=alt2[l]){diff2--;}
+                l++;
+            }
+            if(r-l+1==n){
+                res=Math.min(res,Math.min(diff1,diff2));
+            }
+        }
+        return res;
+    }
+}
