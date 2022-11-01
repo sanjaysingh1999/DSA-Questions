@@ -1,0 +1,28 @@
+Given an integer n, return the number of structurally unique BST's (binary search trees) which has exactly n nodes of unique values from 1 to n.
+Example 1:
+
+Input: n = 3
+Output: 5
+
+Idea: Use DP. Think of every node as root and compute how many tree can be created using left side val . 
+ex: if 1 2 3 4 then think 2 as root and find tree that can be created using left side values i.e(1) so using 1 only 1 tree and using 2 it would
+be dp[1]*dp[0]-<right side 0 num of tree as 2 we think as root.
+
+TC:O(n^2) SC:O(n)
+
+class Solution {
+    public int numTrees(int n) {
+        // nums[4] = nums[0]*nums[3] + nums[1]*nums[2] + nums[2]*nums[1] + nums[3]*nums[0]
+        // i.e how many tree can we make using left side of root(if 4 is root) * right side
+        int [] nums= new int[n+1]; Arrays.fill(nums,1); // so that 0,1 root has 1 tree
+        for(int node=2;node<=n;node++){
+            int total=0;
+            for(int root=1;root<=node;root++){
+                int left=root-1; int right = node-root;//right of root considered will be 0
+                total+=nums[left]*nums[right];
+            }
+            nums[node]=total;
+        }
+        return nums[n];
+    }
+}
