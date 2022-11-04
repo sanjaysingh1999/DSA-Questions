@@ -1,0 +1,62 @@
+Given an integer n, return a list of all possible full binary trees with n nodes. Each node of each tree in the answer must have Node.val == 0.
+
+Each element of the answer is the root node of one possible tree. You may return the final list of trees in any order.
+
+A full binary tree is a binary tree where each node has exactly 0 or 2 children.
+
+ 
+
+Example 1:
+
+
+Input: n = 7
+Output: [[0,0,0,null,null,0,0,null,null,0,0],[0,0,0,null,null,0,0,0,0],[0,0,0,0,0,0,0],[0,0,0,0,0,null,null,null,null,0,0],[0,0,0,0,0,null,null,0,0]]
+
+Even though medium it is hard pblm.
+
+Idea: check with 0,1.. in left and n-1-l,... count in right if we can make full binary tree recursively. for n even we cannot make full bT so return the created res[] 
+till then
+
+TC: 2 ^n
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public List<TreeNode> allPossibleFBT(int n) {
+         HashMap<Integer,List<TreeNode>> dp = new HashMap<>();
+        // to cache computed no. of trees of n
+        return backtrack(n,dp);
+    }
+   public List<TreeNode> backtrack(int n,HashMap<Integer,List<TreeNode>> dp) {
+       if(n==0){return new ArrayList<>();}
+       List<TreeNode> res= new ArrayList<>();
+       if(n==1){res.add(new TreeNode(0)); return res;}
+       if(n%2==0){ return res;}
+       if(dp.containsKey(n)){dp.get(n);}
+       
+       for(int l=0;l<n;l++){ //1-> for root so till n-1 loop
+           int r = n-1-l;
+           List<TreeNode> left = backtrack(l,dp);
+           List<TreeNode> right = backtrack(r,dp);
+           for(TreeNode t1: left){
+               for(TreeNode t2: right){
+                   res.add(new TreeNode(0,t1,t2));
+               }
+           }
+       }
+       dp.put(n,res);
+       return res;
+   }
+}
