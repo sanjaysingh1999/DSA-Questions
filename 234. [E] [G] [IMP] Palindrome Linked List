@@ -1,0 +1,41 @@
+Given the head of a singly linked list, return true if it is a palindrome or false otherwise. 
+
+Example 1:
+
+Input: head = [1,2,2,1]
+Output: true
+Idea: Using slow and fast ptr find middle & then reverse the 2nd half of LL. Then compare 2nd half with 1st half.
+
+->We cannot reverse whole LL and compare reversed with original because it will destroy the LL when reversing.
+TC:O(n) SC:O(1)
+
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public boolean isPalindrome(ListNode head) {
+        ListNode slow = head,fast = head;
+        while(fast!=null && fast.next!=null){
+            fast=fast.next.next;slow=slow.next;
+        }
+        ListNode prev=null;
+        while(slow!=null){
+            ListNode next = slow.next;
+            slow.next=prev; prev=slow; slow=next;
+        }
+        slow=prev; fast=head;
+        while(slow!=null){
+            if(slow.val!=fast.val) return false;
+            slow=slow.next;fast=fast.next;
+        }
+        return true;
+        
+    }
+}
