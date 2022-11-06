@@ -1,0 +1,45 @@
+Given a linked list, swap every two adjacent nodes and return its head. You must solve the problem without modifying the values in the list's nodes 
+(i.e., only nodes themselves may be changed.) 
+
+Example 1:
+
+Input: head = [1,2,3,4]
+Output: [2,1,4,3]
+
+Idea: Save next pair pf ptrs & reverse curr pair then have a prev ptr to save 2nd element after swap so that in next iteration we can connect it with reversed pair
+of next vals. Using dummy for prev implementation as it also gives us result easily.
+
+TC: O(n) SC:O(1)
+
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public ListNode swapPairs(ListNode head) {
+      ListNode dummy = new ListNode(0,head);
+        ListNode curr=head,prev=dummy;
+        while(curr!=null && curr.next!=null){
+            //save next pair ptrs
+            ListNode nextPair = curr.next.next;
+            
+            //update curr ptrs
+            ListNode second = curr.next;
+            second.next=curr;
+            curr.next=nextPair;
+            prev.next=second;
+            
+            //shift ptrs
+            prev=curr;
+            curr = nextPair;
+        }
+        return dummy.next;
+        
+    }
+}
