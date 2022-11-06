@@ -1,0 +1,77 @@
+Given the head of a linked list, return the list after sorting it in ascending order.
+
+Example 1:
+
+Input: head = [4,2,1,3]
+Output: [1,2,3,4]
+
+Not Optimal: Add values to minheap and then change all values of likedlist with minh vals.
+TC: O(nlogn) SC:(n)
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public ListNode sortList(ListNode head) {
+        PriorityQueue<Integer>minh = new PriorityQueue<>();
+        ListNode curr = head;
+        while(curr!=null){
+            minh.offer(curr.val); curr=curr.next;
+        }
+        curr =head;
+        while(curr!=null){
+            curr.val= minh.poll(); curr=curr.next;
+        }
+        return head;
+    }
+}
+
+Optimal : Using merge sort
+TC: O(nlogn) SC:O(logn)
+
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public ListNode sortList(ListNode head) {
+        if(head==null || head.next==null){return head;}
+        
+        ListNode left = head;
+        ListNode right = midNode(head);
+        ListNode temp = right.next; right.next=null; right=temp;
+        
+        left = sortList(left); right = sortList(right);
+        return mergeSort(left,right);
+    }
+    public ListNode midNode(ListNode head){
+        ListNode slow=head, fast=head.next;
+        while(fast!=null && fast.next!=null){
+            slow=slow.next; fast=fast.next.next;
+        }
+        return slow;
+    }
+    public ListNode mergeSort(ListNode list1, ListNode list2){
+        ListNode dummy= new ListNode(0); ListNode temp = dummy;
+        while(list1!=null && list2!=null){
+            if(list1.val<list2.val){temp.next=list1; list1=list1.next;}
+            else{temp.next = list2; list2=list2.next;}
+            temp=temp.next;
+        }
+        while(list1!=null){temp.next=list1; temp=temp.next; list1=list1.next;}
+        while(list2!=null){temp.next=list2; temp=temp.next; list2=list2.next;}
+        return dummy.next;
+    }
+}
