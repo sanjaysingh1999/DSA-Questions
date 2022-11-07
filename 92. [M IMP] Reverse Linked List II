@@ -1,0 +1,42 @@
+Given the head of a singly linked list and two integers left and right where left <= right, reverse the nodes of the list from position left to position right,
+and return the reversed list.
+
+Example 1:
+
+Input: head = [1,2,3,4,5], left = 2, right = 4
+Output: [1,4,3,2,5]
+
+Idea: Create dummy node to handle edge cases like reverse from 1st element itself so prev of it t=exist if we use dummy node. then find location left till right reverse 
+at same time have Leftprev ptr so that we can use it later .
+
+TC:O(n) SC:O(1)
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public ListNode reverseBetween(ListNode head, int left, int right) {
+        ListNode dummy=new ListNode(0,head);
+        ListNode curr=head,LP = dummy;
+        int count = left-1;
+        while(count>0){
+            LP=curr;
+            curr=curr.next; count--;
+        }
+        count = right-left+1;
+        ListNode prev=null;
+        while(count>0){//reversing part of LL
+            ListNode temp = curr.next; curr.next=prev;  prev=curr; 
+            curr=temp; count--;
+        }
+        LP.next.next=curr; LP.next=prev;
+        return dummy.next;
+        
+    }
+}
