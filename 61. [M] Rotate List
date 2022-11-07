@@ -1,0 +1,38 @@
+Given the head of a linked list, rotate the list to the right by k places. 
+
+Example 1:
+
+Input: head = [1,2,3,4,5], k = 2
+Output: [4,5,1,2,3]
+Idea: find break point that if k=2 then last two elements would go in start. Break link from that point and add it to start.
+
+TC: O(n) Sc:O(1)
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public ListNode rotateRight(ListNode head, int k) {
+        if(head==null || k==0) return head;
+        int n=0; ListNode curr = head;
+        while(curr!=null){curr=curr.next; n++;}
+        if(k>=n){k=k%n;}
+        if(k==0) return head; // no changes required
+        curr=head; int end = n-k-1;
+        while(end>0){
+            curr=curr.next; end--;
+        }
+        ListNode temp = curr.next; curr.next=null; curr=temp;
+        while(curr.next!=null){curr=curr.next;}
+        curr.next=head; head = temp;
+        
+        return head;
+        
+    }
+}
