@@ -1,0 +1,39 @@
+You are given a 0-indexed string s of even length n. The string consists of exactly n / 2 opening brackets '[' and n / 2 closing brackets ']'.
+
+A string is called balanced if and only if:
+
+It is the empty string, or
+It can be written as AB, where both A and B are balanced strings, or
+It can be written as [C], where C is a balanced string.
+You may swap the brackets at any two indices any number of times.
+
+Return the minimum number of swaps to make s balanced.
+
+ 
+
+Example 1:
+
+Input: s = "][]["
+Output: 1
+Explanation: You can make the string balanced by swapping index 0 with index 3.
+The resulting string is "[[]]".
+
+Idea: Find at any point of time how many extra closing brackets we had that is the no. of swaps we need to make. For [ -> -1 and for each ]->+1 so that balanced
+automatically cancel each other i.e []-> -1+1=0. At last the no of swaps we think needs to be done is actually after one swap 2 closing bracket problem is solved
+eg: ]]][][[[ so after 0 swaps 6 -> []][][][ therefore ans= res+1/2 (add 1 to make odd to ceil value)
+
+TC:O(n) SC:O(1)
+
+class Solution {
+    public int minSwaps(String s) {
+      int extraClose=0,res=0;
+        for(char c:s.toCharArray()){
+            if(c=='['){
+                extraClose--;
+            }
+            else{extraClose++;}
+            res=Math.max(res,extraClose);
+        }
+        return (res+1)/2;
+    }
+}
