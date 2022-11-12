@@ -1,0 +1,54 @@
+Given a string s, return the number of unique palindromes of length three that are a subsequence of s.
+
+Note that even if there are multiple ways to obtain the same subsequence, it is still only counted once.
+
+A palindrome is a string that reads the same forwards and backwards.
+
+A subsequence of a string is a new string generated from the original string with some characters (can be none) deleted without changing the relative order 
+of the remaining characters.
+
+For example, "ace" is a subsequence of "abcde". 
+
+Example 1:
+
+Input: s = "aabca"
+Output: 3
+Explanation: The 3 palindromic subsequences of length 3 are:
+- "aba" (subsequence of "aabca")
+- "aaa" (subsequence of "aabca")
+- "aca" (subsequence of "aabca")
+
+Idea: Find first and last index od occurence for each char in string. As palindrome of length 3 is req so all unique char bw 1st and last occurence of each char is
+no. of palindromes that can be formed.
+
+TC:O(26*n) SC:O(26)
+
+class Solution {
+    public int countPalindromicSubsequence(String s) {
+        int n=s.length();
+        // char [] str = s.toCharArray();
+        int fo[] = new int[26];//first occurence
+        int lo[] = new int[26];
+        Arrays.fill(fo,-1);Arrays.fill(lo,-1);
+        for(int i=0;i<n;i++){
+            // char c=str[i];
+            if(fo[s.charAt(i)-'a']==-1){
+                fo[s.charAt(i)-'a']=i;
+            }
+            lo[s.charAt(i)-'a']=i;
+        }
+        int res=0;boolean visited[];
+        for(int i=0;i<26;i++){
+           visited =new boolean[26];
+            int si=fo[i],li=lo[i]; int count=0;
+            for(int mi=si+1;mi<li;mi++){
+                if(!visited[s.charAt(mi)-'a']){
+                    visited[s.charAt(mi)-'a'] = true;count++;
+                }
+            }
+            res+=count;
+        }
+        return res;
+    }
+    
+}
