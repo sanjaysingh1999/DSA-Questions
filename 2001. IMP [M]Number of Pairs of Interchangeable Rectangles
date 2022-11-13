@@ -1,0 +1,39 @@
+You are given n rectangles represented by a 0-indexed 2D integer array rectangles, where rectangles[i] = [widthi, heighti] denotes the width and height of the 
+ith rectangle.
+
+Two rectangles i and j (i < j) are considered interchangeable if they have the same width-to-height ratio. More formally, two rectangles are interchangeable if 
+widthi/heighti == widthj/heightj (using decimal division, not integer division).
+
+Return the number of pairs of interchangeable rectangles in rectangles.
+
+Example 1:
+
+Input: rectangles = [[4,8],[3,6],[10,20],[15,30]]
+Output: 6
+Explanation: The following are the interchangeable pairs of rectangles by index (0-indexed):
+- Rectangle 0 with rectangle 1: 4/8 == 3/6.
+- Rectangle 0 with rectangle 2: 4/8 == 10/20.
+- Rectangle 0 with rectangle 3: 4/8 == 15/30.
+- Rectangle 1 with rectangle 2: 3/6 == 10/20.
+- Rectangle 1 with rectangle 3: 3/6 == 15/30.
+- Rectangle 2 with rectangle 3: 10/20 == 15/30.
+
+Idea: USing combination to find pairs after getting rectangles with same ratio of width/height. Using map to point ratio-> count of rectangles.
+
+TC:O(n) SC:O(N)
+class Solution {
+    public long interchangeableRectangles(int[][] rectangles) {
+        HashMap<Double,Integer> map = new HashMap<>();
+        for (int [] wh : rectangles){
+            map.put((double)wh[0]/wh[1],map.getOrDefault((double)wh[0]/wh[1],0)+1);
+        }
+        long res =0;
+        for(int count:map.values()){
+                if(count>1){
+                res+= (long)count*(count-1)/2;
+                //combination /2-> to remove duplicates
+                }
+        }
+        return res;
+    }
+}
