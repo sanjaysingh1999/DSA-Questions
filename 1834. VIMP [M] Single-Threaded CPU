@@ -1,0 +1,35 @@
+Desc:https://leetcode.com/problems/single-threaded-cpu/
+
+Idea: Sort tasks based on time of execution (i.e arrival time) so that we can start with task with lowest starting time. Then add all the task to another array along 
+with their index no. . Now using this array create a min heap based on process time of each task. Add to queue till time of sort order task <= curr_time. Then poll
+out of min heap and add its index to res[] & increment curr_time +=its process time.
+
+TC:O(n)  SC:O(n)  n-> No. of tasks.
+class Solution {
+    public int[] getOrder(int[][] tasks) {
+       int n = tasks.length;
+       int [][] exco = new int[n][3];//execution order with index of each task.
+       for(int i=0;i<n;i++){
+           exco[i][0]= i;
+           exco[i][1]=tasks[i][0];//adding enque time
+           exco[i][2]=tasks[i][1];//adding process time
+       } 
+      Arrays.sort(exco,(a,b)->a[1]-b[1]);//sort based on time of arrival
+     PriorityQueue<int[]> minh = new PriorityQueue<int []>((a,b)->a[2]==b[2]?a[0]-b[0]:a[2]-b[2]); 
+      int time=0,ai=0,ti=0;
+      int [] res = new int[n];
+      while(ai<n){
+          while(ti<n && exco[ti][1]<=time){
+              minh.offer(exco[ti++]);
+          }
+          if(minh.isEmpty()){
+              time=exco[ti][1];continue;
+          }
+          int bestFit[] = minh.poll();
+          res[ai++]=bestFit[0];
+          time+=bestFit[2];
+          
+      }  
+        return res;
+    }
+}
