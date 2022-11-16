@@ -1,0 +1,35 @@
+Desc: https://leetcode.com/problems/process-tasks-using-servers/
+
+Idea: Create 2 min heap one for available server other for not. Unavailable will have freetime as one val which indicates when this server will be free.
+
+TC:O(m*logn) m-> no. of task n-> no. of server  SC:O(n)
+
+class Solution {
+    public int[] assignTasks(int[] servers, int[] tasks) {
+     //2 min heap for available & unavailable servers
+     // avaiable [weight,index]
+     //unavailable [freetime,weight,index]
+PriorityQueue<int[]> available = new PriorityQueue<>((a,b)->a[0]==b[0]?a[1]-b[1]:a[0]-b[0]); PriorityQueue<int[]>unavailable = new PriorityQueue<>((a,b)->a[0]-b[0]);  
+    
+    int t=0,n=tasks.length;int res[] = new int[n]; 
+    for(int i=0;i<servers.length;i++){available.offer(new int[]{servers[i],i});}    
+        
+     
+    for(int i=0;i<n;i++){
+       t = Math.max(i,t); //if t inc in bw then it will inc using unavail heap going forward
+        if(available.isEmpty()){
+            int temp[]=unavailable.peek();
+            t=temp[0];// changing time to freetime of next unavail server 
+        }
+        while(!unavailable.isEmpty() && unavailable.peek()[0]<= t){
+            int temp [] = unavailable.poll();
+            available.offer(new int [] {temp[1],temp[2]});
+        }
+        int temp [] = available.poll();
+        res[i]=temp[1];
+        unavailable.offer(new int [] {t+tasks[i],temp[0],temp[1]});
+    }
+        return res;
+    }
+}
+
