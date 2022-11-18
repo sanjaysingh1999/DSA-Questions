@@ -1,0 +1,34 @@
+You are given an array of strings nums and an integer k. Each string in nums represents an integer without leading zeros.
+
+Return the string that represents the kth largest integer in nums.
+
+Note: Duplicate numbers should be counted distinctly. For example, if nums is ["1","2","2"], "2" is the first largest integer, "2" is the second-largest integer, 
+and "1" is the third-largest integer.
+
+Example 1:
+
+Input: nums = ["3","6","7","10"], k = 4
+Output: "3"
+Explanation:
+The numbers in nums sorted in non-decreasing order are ["3","6","7","10"].
+The 4th largest integer in nums is "3".
+
+Idea: As string length in Q can be <=100 we cannot use int,long. So we compare its lexiographically if its length is equal otherwise greater length will be greater 
+in value. create min heap using this. While traversing if minh size>k then poll to remove k+1th max from minh.
+
+TC:O(nlogk) SC:O(n)
+
+class Solution {
+    public String kthLargestNumber(String[] nums, int k) {
+        PriorityQueue<String> minh = new PriorityQueue<>((s1,s2)->{
+            if(s1.length()==s2.length()){return s1.compareTo(s2);}
+            else{return Integer.compare(s1.length(),s2.length());}
+        });
+        for(String s:nums){
+            minh.offer(s);
+            if(minh.size()>k){minh.poll();}
+        }
+        return minh.poll();
+    }
+}
+
