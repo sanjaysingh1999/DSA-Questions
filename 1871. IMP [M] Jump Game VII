@@ -1,0 +1,40 @@
+You are given a 0-indexed binary string s and two integers minJump and maxJump. In the beginning, you are standing at index 0, which is equal to '0'. 
+You can move from index i to index j if the following conditions are fulfilled:
+
+i + minJump <= j <= min(i + maxJump, s.length - 1), and
+s[j] == '0'.
+Return true if you can reach index s.length - 1 in s, or false otherwise.
+
+Example 1:
+
+Input: s = "011010", minJump = 2, maxJump = 3
+Output: true
+Explanation:
+In the first step, move from index 0 to index 3. 
+In the second step, move from index 3 to index 5.
+
+Idea: From 1st index add next lowest index we can jump & max index range into que. Repeat this for all the range & do bfs like to add range. Inorder to avoid adding
+index no.s that we already have in our queue we can maintain a farthest integer (index max which we have travelled) and whenever we add a range
+in queue it should be > than this int.
+
+TC:O(n)
+
+class Solution {
+    public boolean canReach(String s, int minJump, int maxJump) {
+        ArrayDeque<Integer> que = new ArrayDeque<>();
+        int farthest=0; que.offer(0);
+        while(!que.isEmpty()){
+            int i = que.remove();
+            int start = Math.max(i+minJump,farthest+1);
+     for(int left=start;left<=Math.min(i+maxJump,s.length()-1);left++){//add next range in q
+                if(s.charAt(left)=='0') {
+                    if(left==s.length()-1){return true;}
+                    que.add(left);
+                    
+                }
+            }
+            farthest = i+maxJump;
+            }
+            return false;
+    }
+}
