@@ -1,0 +1,38 @@
+Alice has some number of cards and she wants to rearrange the cards into groups so that each group is of size groupSize, and consists of groupSize consecutive cards.
+
+Given an integer array hand where hand[i] is the value written on the ith card and an integer groupSize, return true if she can rearrange the cards, or false
+otherwise. 
+
+Example 1:
+
+Input: hand = [1,2,3,6,2,3,4,7,8], groupSize = 3
+Output: true
+Explanation: Alice's hand can be rearranged as [1,2,3],[2,3,4],[6,7,8]
+
+Idea: Get min val no. from minheap then check if val to val+group range is there in map or not. If not false, if there then reduce its freqn & if it becomes 0 it
+should be for top of minh only as other num becomes 0 in freqn that means prev num is still remaining & while making a grp next time this curr num won't be avail so
+return false.
+
+TC:O(nlogn) SC:O(n)
+
+class Solution {
+    public boolean isNStraightHand(int[] hand, int groupSize) {
+        HashMap<Integer,Integer> map = new HashMap<>();//no., freqn
+        for(int n:hand){map.put(n,map.getOrDefault(n,0)+1);}
+        PriorityQueue<Integer> minh = new PriorityQueue<>();
+        minh.addAll(map.keySet());
+        while(!minh.isEmpty()){
+            int first = minh.peek();
+            for(int i=first;i<first+groupSize;i++){
+                if(!map.containsKey(i)){return false;}
+                map.put(i,map.get(i)-1);
+                if(map.get(i)==0){
+                    if(minh.peek()!=i){return false;}
+                    minh.poll();
+                }
+            }
+            
+        }
+        return true;
+    }
+}
