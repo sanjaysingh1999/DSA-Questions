@@ -1,0 +1,34 @@
+Given a string s containing only three types of characters: '(', ')' and '*', return true if s is valid.
+
+The following rules define a valid string:
+
+Any left parenthesis '(' must have a corresponding right parenthesis ')'.
+Any right parenthesis ')' must have a corresponding left parenthesis '('.
+Left parenthesis '(' must go before the corresponding right parenthesis ')'.
+'*' could be treated as a single right parenthesis ')' or a single left parenthesis '(' or an empty string "".
+ 
+
+Example 2:
+
+Input: s = "(*)"
+Output: true
+
+Idea: Make two var leftmin:take * as ) and leftmax:take * as (. so that at last we know what could have been the range of count of paranthesis. Otherwise inc for
+( and dec for ). If at anypoint leftmax <0 that means we had more ) than ( return false. If leftmin<0 then make it to 0 which shows that we made wrong choice of
+slecting * as ).
+
+TC:O(n)
+
+class Solution {
+    public boolean checkValidString(String s) {
+        int leftmin=0,leftmax=0;
+        for(int i=0;i<s.length();i++){
+            if(s.charAt(i)=='('){leftmin++;leftmax++;}
+            if(s.charAt(i)==')'){leftmin--;leftmax--;}
+            if(s.charAt(i)=='*'){leftmin--;leftmax++;}
+            if(leftmax<0){return false;}
+            if(leftmin<0){leftmin=0;}
+        }
+        return (leftmin==0 || leftmax==0);
+    }
+}
