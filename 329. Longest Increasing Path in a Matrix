@@ -1,0 +1,41 @@
+Given an m x n integers matrix, return the length of the longest increasing path in matrix.
+
+From each cell, you can either move in four directions: left, right, up, or down. You may not move diagonally or move outside the boundary (i.e., wrap-around is not allowed). 
+
+Example 1:
+
+
+Input: matrix = [[9,9,4],[6,6,8],[2,1,1]]
+Output: 4
+Explanation: The longest increasing path is [1, 2, 6, 9].
+
+Idea: Check from each index if greater of left/right/top/bottom. Save inc order no. in dp which will be used later to avoid repeated work.
+
+TC:theta(mxn) SC:theta(mxn)
+
+class Solution {
+    public int longestIncreasingPath(int[][] matrix) {
+        int r=matrix.length,c=matrix[0].length,res=0;
+        int dp[][] = new int [r][c];
+        for(int i=0;i<r;i++){
+            for(int j=0;j<c;j++){
+              if(dp[i][j]==0){
+                  dfs(dp,i,j,matrix,-1);
+              }
+                res=Math.max(res,dp[i][j]);
+            }
+        }
+        return res;
+    }
+    public int dfs(int[][]dp,int r,int c,int[][] matrix,int parent){
+if(r<0 || r==matrix.length||c<0 || c==matrix[0].length || parent>=matrix[r][c]) return 0;
+       if(dp[r][c]!=0) return dp[r][c];
+       parent = matrix[r][c]; 
+       int top = dfs(dp,r-1,c,matrix,parent);
+       int bottom = dfs(dp,r+1,c,matrix,parent);
+       int left = dfs(dp,r,c-1,matrix,parent);
+       int right= dfs(dp,r,c+1,matrix,parent);
+        dp[r][c] = 1+Math.max(Math.max(left,right),Math.max(top,bottom));
+        return dp[r][c];
+    }
+}
