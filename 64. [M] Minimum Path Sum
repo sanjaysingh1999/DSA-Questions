@@ -1,0 +1,31 @@
+Given a m x n grid filled with non-negative numbers, find a path from top left to bottom right, which minimizes the sum of all numbers along its path.
+
+Note: You can only move either down or right at any point in time. 
+
+Example 1:
+
+
+Input: grid = [[1,3,1],[1,5,1],[4,2,1]]
+Output: 7
+Explanation: Because the path 1 → 3 → 1 → 1 → 1 minimizes the sum.
+
+Idea: Check what path in dp results in min sum using dfs. Store results in an array. For right most element return its value & for out of bound col/row
+return int.max value so that it can be neglected automatically.
+
+TC:O(r x c) SC:theta(rxc)
+
+class Solution {
+    public int minPathSum(int[][] grid) {
+        int r=grid.length, c=grid[0].length;
+        int [][] dp = new int[r][c];
+        dp[r-1][c-1]=grid[r-1][c-1];
+        return dfs(dp,0,0,grid);
+    }
+    public int dfs(int[][]dp,int r, int c,int [][]grid){
+        if(r==grid.length||c==grid[0].length) return Integer.MAX_VALUE;
+        if(dp[r][c]!=0 || r==grid.length-1 && c==grid[0].length-1) return dp[r][c];
+        dp[r][c]=grid[r][c] + Math.min(dfs(dp,r,c+1,grid),dfs(dp,r+1,c,grid));
+        
+        return dp[r][c];
+    }
+}
