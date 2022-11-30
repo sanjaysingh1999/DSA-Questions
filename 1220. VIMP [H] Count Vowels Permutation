@@ -1,0 +1,42 @@
+Given an integer n, your task is to count how many strings of length n can be formed under the following rules:
+
+Each character is a lower case vowel ('a', 'e', 'i', 'o', 'u')
+Each vowel 'a' may only be followed by an 'e'.
+Each vowel 'e' may only be followed by an 'a' or an 'i'.
+Each vowel 'i' may not be followed by another 'i'.
+Each vowel 'o' may only be followed by an 'i' or a 'u'.
+Each vowel 'u' may only be followed by an 'a'.
+Since the answer may be too large, return it modulo 10^9 + 7.
+
+Example 1:
+
+Input: n = 1
+Output: 5
+Explanation: All possible strings are: "a", "e", "i" , "o" and "u".
+
+Idea: Each vowel will be followed by specific chars only. Using this we can find no. of permution at n levels. EG: for a at level 1 it can come after e,i,u only
+So it contributes 3 permutation .. similarly for other chars cal dp.
+
+level 0:         a   e   i   o   u
+Level 1:    chars which can be followed by a are e,i,u. So add their dp values. Similarly e=a,i; i=e,o; o=i; u=i,o. Draw Descn tree to understand better.
+
+TC:O(n) SC:O(n)
+
+class Solution {
+    public int countVowelPermutation(int n) {
+        long dp[][] = new long[n][5];
+        dp[0] = new long[] {1,1,1,1,1}; 
+        long MOD=1000000007;
+        //0->a,1->e,2->i,3->o,4->u 
+        for(int i=1;i<n;i++){
+            dp[i][0]= (dp[i-1][1]+dp[i-1][2]+dp[i-1][4])%MOD;
+            dp[i][1]= (dp[i-1][0]+dp[i-1][2])%MOD;
+            dp[i][2]= (dp[i-1][1]+dp[i-1][3])%MOD;
+            dp[i][3]= dp[i-1][2];
+            dp[i][4]= (dp[i-1][2]+dp[i-1][3])%MOD;
+        }
+        long sum=0;
+        for(int i=0;i<5;i++){sum+=dp[n-1][i]; sum%=MOD;}
+        return (int) sum;
+    }
+}
