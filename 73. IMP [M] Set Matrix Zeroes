@@ -1,0 +1,46 @@
+Given an m x n integer matrix matrix, if an element is 0, set its entire row and column to 0's.
+
+You must do it in place.
+
+Example 1:
+Input: matrix = [[1,1,1],[1,0,1],[1,1,1]]
+Output: [[1,0,1],[0,0,0],[1,0,1]]
+
+Brute 1: Make copy and according to original array if zero make copy row and col 0s. TC:O(mn)^2 SC:O(mn)
+
+Brute 2: Make 1 extra top col & 1 row to mark as 0/1 based on whether that row/col should entirely be of 0's. TC:O(mn) SC:O(m+n)
+
+Optimal
+Idea: Use top row to mark for cols and left most col for rows. For topmost left row we need to use another var as matrix one will be used by to mark for col.
+Based on these marking make matrix 0/1. Don't do it for 1st row & col. First check if oth col needs to be zero then based on leftmostrow var make 1st row zero.
+
+TC:O(mn) SC:O(1)
+
+class Solution {
+    public void setZeroes(int[][] matrix) {
+        int r = matrix.length,c=matrix[0].length;
+        int topleftrow =1;
+        for(int i=0;i<r;i++){
+            for(int j=0;j<c;j++){
+                if(matrix[i][j]==0){
+                    matrix[0][j]=0; //marking top col 0
+                    if(i==0){topleftrow=0;}//marking top left row 0
+                    else{matrix[i][0]=0;}//marking left row 0
+                }
+            }
+        }
+        for(int i=1;i<r;i++){
+            for(int j=1;j<c;j++){
+                if(matrix[i][0]==0 || matrix[0][j]==0){matrix[i][j]=0;}
+            }
+        }
+        if(matrix[0][0]==0){
+            for(int i=0;i<r;i++){matrix[i][0]=0;}
+        }
+        if(topleftrow==0){
+            for(int i=0;i<c;i++){matrix[0][i]=0;}
+        }
+        
+        
+    }
+}
