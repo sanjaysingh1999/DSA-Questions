@@ -1,0 +1,82 @@
+
+Hard
+
+9554
+
+185
+
+Add to List
+
+Share
+The median is the middle value in an ordered integer list. If the size of the list is even, there is no middle value, and the median is the mean of the two middle values.
+
+For example, for arr = [2,3,4], the median is 3.
+For example, for arr = [2,3], the median is (2 + 3) / 2 = 2.5.
+Implement the MedianFinder class:
+
+MedianFinder() initializes the MedianFinder object.
+void addNum(int num) adds the integer num from the data stream to the data structure.
+double findMedian() returns the median of all elements so far. Answers within 10-5 of the actual answer will be accepted.
+ 
+
+Example 1:
+
+Input
+["MedianFinder", "addNum", "addNum", "findMedian", "addNum", "findMedian"]
+[[], [1], [2], [], [3], []]
+Output
+[null, null, null, 1.5, null, 2.0]
+
+Explanation
+MedianFinder medianFinder = new MedianFinder();
+medianFinder.addNum(1);    // arr = [1]
+medianFinder.addNum(2);    // arr = [1, 2]
+medianFinder.findMedian(); // return 1.5 (i.e., (1 + 2) / 2)
+medianFinder.addNum(3);    // arr[1, 2, 3]
+medianFinder.findMedian(); // return 2.0
+
+Idea: Make 2 heap small(maxh) & big(minh). Add val to first small & if small.peek > bigh then move to bigh. If size diff >1 then shift from greater size heap to other.
+If both are diff size then one with > size will have median ans, if == size then /2 peek of both.
+
+TC:O(logn) SC:(n)
+
+class MedianFinder {
+    PriorityQueue<Integer> smallh;
+    PriorityQueue<Integer> bigh;
+    
+    public MedianFinder() {
+        smallh = new PriorityQueue<>((a,b)->b-a);bigh = new PriorityQueue<>();
+    }
+    
+    public void addNum(int num) {
+        smallh.offer(num);
+        //bigger element in small heap
+        if(smallh.size()>0 && bigh.size()>0 && smallh.peek()>bigh.peek()){
+            int val = smallh.poll(); bigh.offer(val);
+        }
+        //uneven size
+        if(smallh.size()> bigh.size() +1){
+            int val = smallh.poll(); bigh.offer(val);
+        }
+        if(bigh.size()> smallh.size() +1){
+            int val = bigh.poll(); smallh.offer(val);
+        }
+    }
+    
+    public double findMedian() {
+        if(bigh.size()> smallh.size()){
+            return bigh.peek();
+        }
+        if(smallh.size()> bigh.size() ){
+            return smallh.peek();
+        }
+        return (double)(bigh.peek()+smallh.peek())/2;
+    }
+}
+
+/**
+ * Your MedianFinder object will be instantiated and called as such:
+ * MedianFinder obj = new MedianFinder();
+ * obj.addNum(num);
+ * double param_2 = obj.findMedian();
+ */
