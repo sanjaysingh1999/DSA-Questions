@@ -1,0 +1,54 @@
+Desc: https://leetcode.com/problems/serialize-and-deserialize-binary-tree/
+
+Idea: Serialize:Do Preorder traversal and add val into a arraylsit, for null add "N". Deserialize: Do preorder traversal add to left and right acc to list,
+for "N" return null.
+
+TC:O(N) SC:O(N)
+
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+public class Codec {
+    private int i=0;
+    // Encodes a tree to a single string.
+    public String serialize(TreeNode root) {
+        ArrayList<String> list = new ArrayList<>();
+        serialDFS(root,list);
+        return String.join(",",list);
+    }
+    private void serialDFS(TreeNode root, ArrayList<String> list){
+        if(root==null){
+            list.add("N"); return;
+        }
+        list.add(String.valueOf(root.val));
+        serialDFS(root.left,list);serialDFS(root.right,list);
+    }
+
+    // Decodes your encoded data to tree.
+    public TreeNode deserialize(String data) {
+        String tokens[] = data.split(",");
+        return deserialDFS(tokens);
+    }
+    public TreeNode deserialDFS(String[] tokens){
+        String token  = tokens[i];
+        if(token.equals("N")){
+            this.i++;
+            return null;
+        }
+        TreeNode node = new TreeNode(Integer.parseInt(token)); this.i++;
+        node.left = deserialDFS(tokens);
+        node.right = deserialDFS(tokens);
+        return node;
+    }
+}
+
+// Your Codec object will be instantiated and called as such:
+// Codec ser = new Codec();
+// Codec deser = new Codec();
+// TreeNode ans = deser.deserialize(ser.serialize(root));
