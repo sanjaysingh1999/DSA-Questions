@@ -1,0 +1,21 @@
+Given two integers a and b, return the sum of the two integers without using the operators + and -. 
+
+Example 1:
+
+Input: a = 1, b = 2
+Output: 3
+
+Idea: Ex-or(^) to add bits, and(&) with left shift 1 to handle carry.
+
+TC:O(1) SC:O(1)
+
+class Solution {
+    public int getSum(int a, int b) {
+        while(b!=0){
+            int temp = a^b;
+            b = (a&b)<<1; 
+            a = temp;
+        }
+        return a;
+    }
+}
