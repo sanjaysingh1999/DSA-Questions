@@ -1,0 +1,20 @@
+Desc: https://leetcode.com/problems/remove-duplicates-from-sorted-array/
+
+Input: nums = [0,0,1,1,1,2,2,3,3,4]
+Output: 5, nums = [0,1,2,3,4,_,_,_,_,_]
+Explanation: Your function should return k = 5, with the first five elements of nums being 0, 1, 2, 3, and 4 respectively.
+It does not matter what you leave beyond the returned k (hence they are underscores).
+
+Idea:  Inc right ptr till it is diff from r-1. Then store it at left ptr and inc left by 1 for next element.
+
+TC:O(n) SC:O(1)
+
+class Solution {
+    public int removeDuplicates(int[] nums) {
+        int l=1,n=nums.length;
+        for(int r=1;r<n;r++){
+            if(nums[r]!=nums[r-1]){nums[l]=nums[r];l++;}
+        }
+        return l;
+    }
+}
