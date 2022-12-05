@@ -1,0 +1,60 @@
+Design a data structure that supports adding new words and finding if a string matches any previously added string.
+
+Implement the WordDictionary class:
+
+WordDictionary() Initializes the object.
+void addWord(word) Adds word to the data structure, it can be matched later.
+bool search(word) Returns true if there is any string in the data structure that matches word or false otherwise. word may contain dots '.' where dots can be matched with any letter.
+
+Idea: Same as trie implementation. Only for search '.' check all childrens of curr node for matching with word.
+
+class WordDictionary {
+    TrieNode root;
+    public WordDictionary() {
+        root = new TrieNode('\0');
+    }
+    
+    public void addWord(String word) {
+        TrieNode curr = root;
+        for(char c:word.toCharArray()){
+            if(curr.childrens[c-'a'] == null){
+                curr.childrens[c-'a'] = new TrieNode(c);
+            }
+            curr=curr.childrens[c-'a'];
+        }
+        curr.isWord=true;
+    }
+    
+    public boolean search(String word) {
+        return getLast(word,root,0); //TC O(m^2)
+    }
+    public boolean getLast(String word,TrieNode curr,int index){
+        for(int i=index;i<word.length();i++){
+           char c = word.charAt(i);
+            if(c == '.'){
+                for(TrieNode temp:curr.childrens){
+                    if(temp!=null && getLast(word,temp,i+1)){
+                        return true;
+                    }
+                }
+                return false;
+            }
+            if(curr.childrens[c - 'a']==null){return false;}
+            curr=curr.childrens[c-'a'];
+        }
+        return curr.isWord;
+    }
+    class TrieNode{
+        char val; TrieNode[]childrens = new TrieNode[26];boolean isWord=false;
+        public TrieNode(char val){
+            this.val=val;
+        }
+    }
+}
+
+/**
+ * Your WordDictionary object will be instantiated and called as such:
+ * WordDictionary obj = new WordDictionary();
+ * obj.addWord(word);
+ * boolean param_2 = obj.search(word);
+ */
