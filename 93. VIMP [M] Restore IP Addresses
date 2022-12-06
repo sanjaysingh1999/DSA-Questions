@@ -1,0 +1,24 @@
+Desc: https://leetcode.com/problems/restore-ip-addresses/description/
+
+Idea: We can have onlty till 3 chars before a dot. So check for each 3 chars & backtrack the dots. Max length of s can be 12 as 12/4 =3 (4->dots).
+
+TC:O(3^12)   SC:O(3^4) as we can have only 4 level height decision tree
+
+class Solution {
+    public List<String> restoreIpAddresses(String s) {
+        if(s.length()>12) return new ArrayList();
+        List<String> res = new ArrayList<>();
+        backtrack(0,0,s,res,"");
+        return res;
+    }
+    public void backtrack(int i,int dots,String s,List<String> res,String currIP){
+        if(dots==4 && i==s.length()) 
+        {res.add(currIP.substring(0,currIP.length()-1)); return;}
+        if(dots>4) return;
+        for(int j=i;j<Math.min(i+3,s.length());j++){
+    if(Integer.valueOf(s.substring(i,j+1))<256 && (i==j || s.charAt(i) != '0' ) ){
+            backtrack(j+1,dots+1,s,res,currIP+s.substring(i,j+1)+".");
+            }
+        }
+    }
+}
