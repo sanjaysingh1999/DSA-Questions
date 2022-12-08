@@ -1,0 +1,56 @@
+
+You are given a string s that consists of only digits.
+
+Check if we can split s into two or more non-empty substrings such that the numerical values of the substrings are in descending order and the difference between numerical values of every two adjacent substrings is equal to 1.
+
+For example, the string s = "0090089" can be split into ["0090", "089"] with numerical values [90,89]. The values are in descending order and adjacent values differ by 1, so this way is valid.
+Another example, the string s = "001" can be split into ["0", "01"], ["00", "1"], or ["0", "0", "1"]. However all the ways are invalid because they have numerical values [0,1], [0,1], and [0,0,1] respectively, all of which are not in descending order.
+Return true if it is possible to split s​​​​​​ as described above, or false otherwise.
+
+A substring is a contiguous sequence of characters in a string.
+ 
+
+Example 1:
+
+Input: s = "1234"
+Output: false
+Explanation: There is no valid way to split s.
+
+block is req as prev,curr string >18 length which cannot be handled by long.
+
+Idea: Check for each num if > then prev then continue otherwise backtrack. For 1st prev we check each combination like 0-1 index,0-2index... . Try and catch
+
+
+TC: O(n^18) SC:O(h)
+
+class Solution {
+    public boolean splitString(String s) {
+        for(int i=0;i<s.length()-1;i++){
+            if(backtrack(s,i+1,s.substring(0,i+1) )){return true;}
+        }
+        return false;
+    }
+    public boolean backtrack(String s,int i,String prev){
+        if(i==s.length() ) return true;
+        if(prev.length() >= 20){
+            return false;
+        }
+        long prevVal,currVal;
+        try{
+            prevVal = Long.parseLong(prev);
+        }catch(NumberFormatException e){
+            return false;
+        }
+        for(int j=i;j<s.length();j++){
+            String curr =s.substring(i,j+1);
+             try{
+            currVal = Long.valueOf(curr);
+            }catch(NumberFormatException e){
+                continue;
+            }
+            if( currVal+1==prevVal && backtrack(s,j+1,curr)){return true;}
+        
+        }
+        return false;
+    }
+}
