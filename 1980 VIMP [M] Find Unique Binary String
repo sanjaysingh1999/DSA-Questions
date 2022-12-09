@@ -1,0 +1,32 @@
+Given an array of strings nums containing n unique binary strings each of length n, return a binary string of length n that does not appear in nums. 
+If there are multiple answers, you may return any of them. 
+
+Example 1:
+
+Input: nums = ["01","10"]
+Output: "11"
+Explanation: "11" does not appear in nums. "00" would also be correct.
+
+Idea: By taking 0's and 1's one by one check if it combination does not exsit in set. If not return res else backtrack and select 1 if 0 was selected first.
+
+TC: O(2^n) but it is O(n^2) as we will find soln in between. SC:O(n) height
+
+class Solution {
+    String comb="";
+    public String findDifferentBinaryString(String[] nums) {
+        HashSet<String> set = new HashSet<>(); for(String s:nums){set.add(s);}
+        backtrack(nums,set,0);
+        return comb;
+    }
+    public boolean backtrack(String[] nums,HashSet<String> set, int i){
+        if(set.contains(comb)) return false;
+        if(i==nums.length) return true;
+
+        for(int j=0;j<2;j++){
+            comb+=Integer.toString(j); 
+            if(backtrack(nums,set,i+1)) return true;
+            comb=comb.substring(0,comb.length()-1);
+        }
+        return false;
+    }
+}
