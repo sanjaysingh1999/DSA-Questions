@@ -1,0 +1,53 @@
+You are given an array of strings arr. A string s is formed by the concatenation of a subsequence of arr that has unique characters.
+
+Return the maximum possible length of s.
+
+A subsequence is an array that can be derived from another array by deleting some or no elements without changing the order of the remaining elements. 
+
+Example 1:
+
+Input: arr = ["un","iq","ue"]
+Output: 4
+Explanation: All the valid concatenations are:
+- ""
+- "un"
+- "iq"
+- "ue"
+- "uniq" ("un" + "iq")
+- "ique" ("iq" + "ue")
+Maximum length is 4.
+
+Idea: Select string if it's chars are not in hash set else move to next index using backtrack. Main thing is to not add in og Hashset in helper function as it would 
+cause issue for string which has chars repeated in it.
+
+TC:O(2^n) SC:O(n)
+
+class Solution {
+    public int maxLength(List<String> arr) {
+        HashSet<Character> set= new HashSet<>();
+        return backtrack(arr,0,set);
+    }
+    public int backtrack(List<String> arr,int i, HashSet<Character> set){
+        if(i==arr.size()) return set.size();
+        int res=0;
+            if(!overlap(arr.get(i),set)){
+            for(int k=0;k<arr.get(i).length();k++){
+                set.add(arr.get(i).charAt(k));
+                }    
+            res = backtrack(arr,i+1,set) ; 
+            for(int k=0;k<arr.get(i).length();k++){
+                set.remove(arr.get(i).charAt(k));
+                }
+            }
+        return Math.max(res,backtrack(arr,i+1,set) );
+    }
+    public boolean overlap(String str, HashSet<Character> set){
+             HashSet<Character> prev = new HashSet<>();
+            for(int k=0;k<str.length();k++){
+                char c = str.charAt(k); 
+                if(set.contains(c)||prev.contains(c)){return true;}
+                prev.add(c);
+            }
+            return false;//not in set already
+    }
+}
