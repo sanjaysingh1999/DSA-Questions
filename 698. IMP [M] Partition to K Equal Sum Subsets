@@ -1,0 +1,41 @@
+Given an integer array nums and an integer k, return true if it is possible to divide this array into k non-empty subsets whose sums are all equal.
+
+Example 1:
+
+Input: nums = [4,3,2,3,5,2,1], k = 4
+Output: true
+Explanation: It is possible to divide it into 4 subsets (5), (1, 4), (2,3), (2,3) with equal sums.
+
+Idea: Try to find target (i.e sum/k) using backtrack & then add it in used array and do bactracking for rest with used index marked true. 
+Reverse array for better performance as large values will be neglected then intially if sorted reverse.
+
+TC:O(k 2^n) SC:(n)
+
+
+class Solution {
+    public boolean canPartitionKSubsets(int[] nums, int k) {
+        int sum=0; for(int n:nums){sum+=n;} 
+        if(sum%k!=0) return false;
+        boolean used[] = new boolean[nums.length];
+        nums = reverse(nums);
+        return backtrack(sum/k,nums,0,k,0,used);
+    }
+    public boolean backtrack(int target,int [] nums,int i,int k,int currSum,boolean[] used){
+        if(k==0){return true;}
+        if(currSum==target){return backtrack(target,nums,0,k-1,0,used);}
+        for(int j=i;j<nums.length;j++){
+            if( currSum+nums[j] >target || used[j]) {continue;}
+            used[j]=true;
+            if(backtrack(target,nums,j+1,k,currSum+nums[j],used)){return true;}
+            used[j]=false;
+        }
+        return false;
+    }
+    public int[] reverse(int[] nums){
+        int i=0,j=nums.length-1;
+        while(i<j){
+            int temp = nums[i]; nums[i++]=nums[j]; nums[j--]=temp;
+        }
+        return nums;
+    }
+}
