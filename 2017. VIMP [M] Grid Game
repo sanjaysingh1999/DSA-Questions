@@ -1,0 +1,29 @@
+Desc: https://leetcode.com/problems/grid-game/description/
+
+Idea: After robot 1 robot 2 can switch row at any position. We calculate prefix sum of 1st & 2nd row & check at every posn if robot1 had changed row then which
+of top or bottom prefix sum is max i.e robot2 can have. Then continuing we find min for robot 2 as we want to maximize for robot 1.
+
+TC:O(n) SC:theta(c)
+
+class Solution {
+    public long gridGame(int[][] grid) {
+      int c=grid[0].length;
+      long [] prefixsum_r1 = new long[c];long [] prefixsum_r2 = new long[c];
+      prefixsum_r1[0]=grid[0][0];prefixsum_r2[0]=grid[1][0];
+      for(int i=1;i<c;i++){
+          prefixsum_r1[i] = prefixsum_r1[i-1]+grid[0][i];
+          prefixsum_r2[i] = prefixsum_r2[i-1]+grid[1][i];
+      }
+      long bottom=0,res=Long.MAX_VALUE;
+      for(int i=0;i<c;i++){
+          long top = prefixsum_r1[c-1]-prefixsum_r1[i];
+          bottom = prefixsum_r2[i]-grid[1][i];//- grid[1][i] to remove that index and cal befores
+          long robot2 = Math.max(top,bottom);
+          res = Math.min(res,robot2); 
+      }
+      return res;
+    
+    }
+    
+
+}
