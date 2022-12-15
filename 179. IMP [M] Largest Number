@@ -1,0 +1,38 @@
+Given a list of non-negative integers nums, arrange them such that they form the largest number and return it.
+
+Since the result may be very large, so you need to return a string instead of an integer.
+
+Example 1:
+
+Input: nums = [10,2]
+Output: "210"
+
+Idea: Using custom comparator sort string based on which of 2 forms greater value. Eg: 30 3 -> "330" > "303" and  due to this eg type case only we cannot simply 
+sort it in desc order. Edge case: If i/p had only 0 0 0 .. then res would be 0000.. so check if 1st index is 0 is yes return "0".
+
+TC:O(nlogn) SC:(n)
+
+class Solution {
+    private class sortStrings implements Comparator<String>{
+        @Override
+        public int compare(String str1 ,String str2){
+            String order1 = str1+str2; String order2 = str2+str1;
+            return order2.compareTo(order1);
+        }
+    }
+    public String largestNumber(int[] nums) {
+        String Snums [] = new String [nums.length];
+        for(int i=0;i<nums.length;i++){
+            Snums[i] = String.valueOf(nums[i]);
+        }
+        Arrays.sort(Snums,new sortStrings());
+        
+        if(Snums[0].equals("0")){return "0";} //if nums was only 0, 0, .. then this is applicablee
+        String res = new String();
+        for(int i=0;i<Snums.length;i++){
+            res+=Snums[i];
+        }
+        return res;
+    }
+    
+}
