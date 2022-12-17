@@ -1,0 +1,51 @@
+RandomizedSet() Initializes the RandomizedSet object.
+bool insert(int val) Inserts an item val into the set if not present. Returns true if the item was not present, false otherwise.
+bool remove(int val) Removes an item val from the set if present. Returns true if the item was present, false otherwise.
+int getRandom() Returns a random element from the current set of elements (it's guaranteed that at least one element exists when this method is called). 
+Each element must have the same probability of being returned. You must implement the functions of the class such that each function works in average O(1) 
+time complexity.
+
+Idea: We cannot implement random fn with only set & list as for removal from list would be O(n) operation. We implement using map (val,index in list) & list.
+For add simply add it in list,map. For removal get index of val from map and replace that index with last val of list, remove last val of list, update last element
+which was copied it's index in map with curr index & remove val from map.
+
+TC:O(1) for each 
+
+class RandomizedSet {
+    HashMap<Integer,Integer> numMap; // val, index in list
+    ArrayList<Integer> numList;
+    public RandomizedSet() {
+        numMap = new HashMap<>(); numList = new ArrayList<>();
+    }
+    
+    public boolean insert(int val) {
+        if(numMap.containsKey(val)){return false;}
+        numMap.put(val,numList.size());
+        numList.add(val);
+        return true;
+    }
+    
+    public boolean remove(int val) {
+        if(!numMap.containsKey(val)){return false;}
+        int index = numMap.get(val), lastVal = numList.get(numList.size()-1);
+        numList.set(index, lastVal ); // replace index with last
+        numMap.put(lastVal, index);
+        numList.remove(numList.size()-1); // remove duplicate at last
+        numMap.remove(val);
+        return true;
+    }
+    
+    public int getRandom() {
+        Random r = new Random();
+        int rand = r.nextInt(numList.size());
+        return numList.get(rand);
+    }
+}
+
+/**
+ * Your RandomizedSet object will be instantiated and called as such:
+ * RandomizedSet obj = new RandomizedSet();
+ * boolean param_1 = obj.insert(val);
+ * boolean param_2 = obj.remove(val);
+ * int param_3 = obj.getRandom();
+ */
