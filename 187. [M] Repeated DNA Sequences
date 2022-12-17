@@ -1,0 +1,45 @@
+The DNA sequence is composed of a series of nucleotides abbreviated as 'A', 'C', 'G', and 'T'.
+
+For example, "ACGAATTCCG" is a DNA sequence.
+When studying DNA, it is useful to identify repeated sequences within the DNA.
+
+Given a string s that represents a DNA sequence, return all the 10-letter-long sequences (substrings) that occur more than once in a DNA molecule.
+You may return the answer in any order. 
+
+Example 1:
+
+Input: s = "AAAAACCCCCAAAAACCCCCCAAAAAGGGTTT"
+Output: ["AAAAACCCCC","CCCCCAAAAA"]
+
+Brute: TC:O(n^2)
+
+class Solution {
+    public List<String> findRepeatedDnaSequences(String s) {
+        HashSet<String> set = new HashSet<>();
+        ArrayList<String> res = new ArrayList<>();
+        for(int i=0;i<=s.length()-10;i++){
+            String substr = s.substring(i,i+10);
+            if(set.contains(substr) && !res.contains(substr)){res.add(substr);}
+            else{set.add(substr);}
+        }
+        return res;
+    }
+}
+
+Optimal : Check if already in set then add to another set (result) later convert to list 
+TC:O(n) SC:O(n)
+
+class Solution {
+    public List<String> findRepeatedDnaSequences(String s) {
+        HashSet<String> container = new HashSet<>();
+        HashSet<String> similar = new HashSet<>();
+        int index=0;
+        for(int i=0;i<=s.length()-10;i++){
+            String substr = s.substring(i,i+10);
+            if(container.contains(substr)) { similar.add(substr);}
+            container.add(substr);
+        }
+        ArrayList<String> res = new ArrayList<>(similar);
+        return res;
+    }
+}
