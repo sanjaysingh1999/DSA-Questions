@@ -1,0 +1,37 @@
+Given the head of a sorted linked list, delete all duplicates such that each element appears only once. Return the linked list sorted as well. 
+
+Example 1:
+Input: head = [1,1,2]
+Output: [1,2]
+
+Idea: Use right ptr to check if it is diff from prev num if yes replace it at left ptr and inc left ptr. But before inc left ptr store it in one ptr to 
+remove connection at last.
+
+TC:O(n) SC:O(n)
+
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public ListNode deleteDuplicates(ListNode head) {
+        if(head==null || head.next==null) return head;
+        ListNode left=head.next,right=head.next,prev=head,prevleft=head;
+        while(right!=null){
+            if(right.val!=prev.val){
+            left.val=right.val;prevleft=left;left=left.next;//removing last connectn
+            }
+            prev=right;
+            right=right.next;
+        }
+        prevleft.next=null;
+        return head;
+
+    }
+}
