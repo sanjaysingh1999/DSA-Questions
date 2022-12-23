@@ -1,0 +1,50 @@
+
+You are given a string s and an integer k, a k duplicate removal consists of choosing k adjacent and equal letters from s and removing them, causing the left
+and the right side of the deleted substring to concatenate together.
+
+We repeatedly make k duplicate removals on s until we no longer can.
+
+Return the final string after all such duplicate removals have been made. It is guaranteed that the answer is unique.
+
+Example 2:
+
+Input: s = "deeedbbcccbdaa", k = 3
+Output: "aa"
+Explanation: 
+First delete "eee" and "ccc", get "ddbbbdaa"
+Then delete "bbb", get "dddaa"
+Finally delete "ddd", get "aa"
+
+Idea: Create a stack of pairs and add char,count into it. If peek char = curr char then +1 to indicate continuous same chars. If char count == k then remove from stack
+
+TC:O(n) SC:O(n)
+
+class Solution {
+    public String removeDuplicates(String s, int k) {
+        ArrayDeque<Pair<Character,Integer> > stk = new ArrayDeque<>();  //char,count
+        
+        for(int i=0;i<s.length();i++){
+            char c = s.charAt(i);
+            if(!stk.isEmpty() && stk.peek().getKey()==c){
+                int count = stk.peek().getValue() +1 ;
+                stk.pop(); stk.push(new Pair(c,count));
+            }
+            else{
+                stk.push(new Pair(c,1));
+            }
+            if(stk.peek().getValue()==k){
+                stk.pop();//remove duplicate charws
+            }  
+  
+        }
+        String res=""; 
+        while(!stk.isEmpty()){
+            int freq = stk.peek().getValue();
+            char ch = stk.pop().getKey();
+            while(freq-->0){
+                res=ch+res;
+            }
+        }
+        return res;
+    }
+}
