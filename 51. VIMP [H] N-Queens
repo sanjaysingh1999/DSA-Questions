@@ -1,0 +1,44 @@
+The n-queens puzzle is the problem of placing n queens on an n x n chessboard such that no two queens attack each other.
+
+Given an integer n, return all distinct solutions to the n-queens puzzle. You may return the answer in any order.
+
+Each solution contains a distinct board configuration of the n-queens' placement, where 'Q' and '.' both indicate a queen and an empty space, respectively. 
+
+Example 1:
+
+Input: n = 4
+Output: [[".Q..","...Q","Q...","..Q."],["..Q.","Q...","...Q",".Q.."]]
+Explanation: There exist two distinct solutions to the 4-queens puzzle as shown above
+
+Idea: Before adding queen at col i check if already col in use or in positive diagonal(r+c) or -ve diag (r-c) exist. Use set for all these checks.
+
+TC:O(no. of row ^ 2) SC:O(nxn)
+
+class Solution {
+    public List<List<String>> solveNQueens(int n) {
+        List<List<String>> res = new ArrayList<>();
+    HashSet<Integer> col = new HashSet<>();HashSet<Integer> pdiag = new HashSet<>();
+    HashSet<Integer> ndiag = new HashSet<>();
+        char[][] board = new char[n][n];
+        for(int i=0;i<n;i++){ 
+            for(int j=0;j<n;j++){board[i][j]='.';}
+        }
+        backtrack(0,n,res,col,pdiag,ndiag,board);
+        return res;
+    }
+    public void backtrack(int r,int n,List<List<String>> res,HashSet<Integer> col,HashSet<Integer> pdiag, HashSet<Integer> ndiag,char[][] board){
+        if(r==n){
+            List<String> list = new ArrayList<String>();
+            for(int i=0;i<board.length;i++){
+            list.add(String.valueOf(board[i]));}
+            res.add(list); return; 
+        }
+        for(int c=0;c<n;c++){//place queen in each col
+            if(col.contains(c) || pdiag.contains(c+r) || ndiag.contains(r-c)) {continue;}
+            col.add(c);pdiag.add(c+r);ndiag.add(r-c);board[r][c]='Q';
+            backtrack(r+1,n,res,col,pdiag,ndiag,board); 
+            col.remove(c);pdiag.remove(c+r);ndiag.remove(r-c); board[r][c]='.';
+        }
+    }
+    
+}
