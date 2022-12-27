@@ -1,0 +1,32 @@
+The n-queens puzzle is the problem of placing n queens on an n x n chessboard such that no two queens attack each other.
+
+Given an integer n, return the number of distinct solutions to the n-queens puzzle. 
+
+Example 1:
+
+Input: n = 4
+Output: 2
+Explanation: There are two distinct solutions to the 4-queens puzzle as shown.
+
+Idea: same as Nqueen check if already in col or positive diag or -ve diag. If not then add queen else continue. After that remove from hashset and contiunue.
+
+TC:O(n^n) SC:O(n) 
+
+class Solution {
+    int res=0;
+    public int totalNQueens(int n) {
+        HashSet<Integer> col = new HashSet<>(); HashSet<Integer> pdiag = new HashSet<>();
+        HashSet<Integer> ndiag = new HashSet<>();
+        backtrack(0,col,pdiag,ndiag,n);
+        return res;
+    }
+    public void backtrack(int r,HashSet<Integer> col,HashSet<Integer> pdiag,HashSet<Integer> ndiag,int n){
+        if(r==n){res++; return;}
+        for(int c=0;c<n;c++){
+            if(col.contains(c) || pdiag.contains(r+c)||ndiag.contains(r-c)){continue;}
+            col.add(c) ; pdiag.add(r+c) ; ndiag.add(r-c);
+            backtrack(r+1,col,pdiag,ndiag,n);
+            col.remove(c) ; pdiag.remove(r+c) ; ndiag.remove(r-c);
+        }
+    }
+}
