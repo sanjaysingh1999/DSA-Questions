@@ -1,0 +1,46 @@
+You are given an integer array nums. You want to maximize the number of points you get by performing the following operation any number of times:
+
+Pick any nums[i] and delete it to earn nums[i] points. Afterwards, you must delete every element equal to nums[i] - 1 and every element equal to nums[i] + 1.
+Return the maximum number of points you can earn by applying the above operation some number of times.
+
+Example 1:
+
+Input: nums = [3,4,2]
+Output: 6
+Explanation: You can perform the following operations:
+- Delete 4 to earn 4 points. Consequently, 3 is also deleted. nums = [2].
+- Delete 2 to earn 2 points. nums = [].
+You earn a total of 6 points.
+
+Idea: Create a dp type 2 var which store prev 2 max we could collect. We add prev earn in curr if != curr num -1 else add max(curr earn+prev.prev earn, prev earn)
+Remove duplicates and sort to make things easier while iterating.
+
+TC:O(nlogn) SC:O(n)
+
+class Solution {
+    public int deleteAndEarn(int[] nums) {
+        HashMap<Integer,Integer> count = new HashMap<>(); // num,count
+        for(int n:nums){count.put(n,count.getOrDefault(n,0)+1);}
+        Arrays.sort(nums);
+
+        int num [] = new int [count.size()]; int index=0; num[index++]=nums[0];
+        for(int i=1;i<nums.length;i++){if(nums[i]!=nums[i-1]){num[index++] = nums[i];}}
+        
+        int earn1=0,earn2=0;
+        for(int i=0;i<num.length;i++){
+            int currEarn = num[i] * count.get(num[i]);
+            if(i>0 && num[i]==num[i-1]+1){
+                int temp = earn2;
+                earn2 = Math.max(earn2,currEarn+earn1);
+                earn1 = temp;
+            }
+            else{
+                int temp = earn2;
+                earn2 = earn2+currEarn;
+                earn1 = temp;
+            }
+
+        }
+        return earn2;
+    }
+}
