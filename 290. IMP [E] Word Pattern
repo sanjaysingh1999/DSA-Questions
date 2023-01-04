@@ -1,0 +1,28 @@
+Given a pattern and a string s, find if s follows the same pattern.
+
+Here follow means a full match, such that there is a bijection between a letter in pattern and a non-empty word in s. 
+
+Example 1:
+
+Input: pattern = "abba", s = "dog cat cat dog"
+Output: true
+
+Idea: Create 2 maps for mapping of word to char & char to Word. 
+
+TC:O(n) SC:O(n) n= length of pattern text or length of s after split
+
+class Solution {
+    public boolean wordPattern(String pattern, String s) {
+        String arr[] = s.split("\s");
+        if(pattern.length()!=arr.length){return false;}
+        HashMap<Character,String> charToWord = new HashMap<>();
+        HashMap<String,Character> wordTochar = new HashMap<>();
+        for(int i=0;i<pattern.length();i++){
+            String str = arr[i]; char pChar= pattern.charAt(i);
+        if(charToWord.containsKey(pChar) && !charToWord.get(pChar).equals(str)){return false;}
+            if(wordTochar.containsKey(str) && wordTochar.get(str)!=pChar){return false;}
+            charToWord.put(pChar,str);wordTochar.put(str,pChar);
+        }
+        return true;
+    }
+}
