@@ -1,0 +1,28 @@
+Given an integer n, break it into the sum of k positive integers, where k >= 2, and maximize the product of those integers.
+
+Return the maximum product you can get. 
+
+Example 1:
+
+Input: n = 2
+Output: 1
+Explanation: 2 = 1 + 1, 1 × 1 = 1.
+
+Idea: Check its split till <n and for each split num < n we can take dp[num] as itself as we are not requried to split it but not for original no. n. We do compute
+split of splitted nums too to check its product becomes > number itself. Keep storing the result into dp array.
+
+TC:O(n^2) SC:(n)
+
+class Solution {
+    public int integerBreak(int n) {
+        int [] dp = new int[n+1]; dp[1]=1;
+        for(int num=2;num<=n;num++){
+            if(num!=n){dp[num]=num;}
+            for(int i=1;i<num;i++){
+                int val = dp[i] * dp[num - i];
+                dp[num] = Math.max(dp[num],val);
+            }
+        }
+        return dp[n];
+    }
+}
