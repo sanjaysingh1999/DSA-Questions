@@ -1,0 +1,32 @@
+Desc: https://leetcode.com/problems/maximum-number-of-removable-characters/description/
+
+Idea: Add index from removable array using binary search & then check if without chars at this index if p is still subseq of s if yes then add it to res as mid+1.
+
+TC:O(nlogk) SC:O(n)
+
+class Solution {
+    public int maximumRemovals(String s, String p, int[] removable) {
+        int l=0,r =removable.length-1,res=0;
+        HashSet<Integer> Remove = new HashSet<>();
+        while(l<=r){
+            int mid = (l+r)/2;
+            for(int i=0;i<=mid;i++){Remove.add(removable[i]);}
+            if(isSubsequence(s,p,Remove)){
+                res = Math.max(res,mid+1); l=mid+1;
+            }
+            else{r=mid-1;}
+            Remove.clear();
+        }
+        return res;
+    }
+    public boolean isSubsequence(String s,String subseq,HashSet<Integer> remove){
+        int i1=0,i2=0;
+        while(i1<s.length() && i2<subseq.length()){
+            if(!remove.contains(i1) && s.charAt(i1)==subseq.charAt(i2)){
+                i2++; 
+            }
+            i1++;
+        }
+        return i2==subseq.length();
+    }
+}
