@@ -1,0 +1,48 @@
+Brute: TC:O(n^2)
+
+public class Solution {
+    public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
+        ListNode curr1=headA, curr2=headB;
+        while(curr1!=null){
+            curr2=headB;
+            while(curr2!=null){
+                if(curr2==curr1){return curr2;}
+                curr2=curr2.next;
+            }
+        }
+        return null;
+    }
+}
+
+Not Optimal: Add one LL to hashset set and check if other is present.
+
+TC:O(n) n=max nodes in either if LL.  SC: O(n) n=nodes in LL 1.
+
+public class Solution {
+    public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
+        HashSet<ListNode> set = new HashSet<>();
+        ListNode curr1=headA, curr2=headB;
+        while(curr1!=null){set.add(curr1); curr1=curr1.next;}
+        while( curr2!=null){
+            if(set.contains(curr2)){return curr2;}
+            curr2=curr2.next;
+        }
+        return null;
+    }
+}
+
+Optimal : IDea Looop throught both ll and whichever reaches end first point it to head of other so that we can remove diff in start. Then iterate and we will get
+our intersection point
+
+TC:(M+N) m,n=len of 2 LL
+
+public class Solution {
+    public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
+        ListNode a=headA,b=headB;
+        while(a!=b){
+            a= (a==null)?headB:a.next;
+            b= (b==null)?headA:b.next;
+        }
+        return a;
+    }
+}
