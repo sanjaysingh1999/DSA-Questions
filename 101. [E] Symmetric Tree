@@ -1,0 +1,24 @@
+Given the root of a binary tree, check whether it is a mirror of itself (i.e., symmetric around its center).
+
+Example 1:
+
+Input: root = [1,2,2,3,4,4,3]
+Output: true
+Example 2:
+
+Idea: Do dfs on each l of l & r of r tree && r of l & l of r tree and check if val matches.
+
+TC:O(n) SC:O(n)
+
+class Solution {
+    public boolean isSymmetric(TreeNode root) {
+        return dfs(root.left,root.right);
+    }
+    public boolean dfs(TreeNode rootl , TreeNode rootr){
+        if(rootl==null && rootr==null) return true;
+        if( (rootl!=null && rootr==null) || 
+            (rootl==null && rootr!=null)) return false;
+        if(rootl.val!=rootr.val) return false;
+        return (dfs(rootl.left,rootr.right) && dfs(rootl.right,rootr.left)); 
+    }
+}
