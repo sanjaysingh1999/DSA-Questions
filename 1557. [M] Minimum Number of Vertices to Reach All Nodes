@@ -1,0 +1,32 @@
+Given a directed acyclic graph, with n vertices numbered from 0 to n-1, and an array edges where edges[i] = [fromi, toi] represents a directed edge from node 
+from i to node toi.
+
+Find the smallest set of vertices from which all nodes in the graph are reachable. It's guaranteed that a unique solution exists.
+
+Notice that you can return the vertices in any order.
+
+Example 1:
+
+Input: n = 6, edges = [[0,1],[0,2],[2,5],[3,4],[4,2]]
+Output: [0,3]
+Explanation: It's not possible to reach all the nodes from a single vertex. From 0 we can reach [0,1,2,5]. From 3 we can reach [3,4,2,5]. So we output [0,3].
+
+Idea: To get which all vertices are required to reach each vertices in graph get the one's with 0 indegree that is requires as obvious.
+
+TC:(V*E) SC:O(V)
+
+class Solution {
+    public List<Integer> findSmallestSetOfVertices(int n, List<List<Integer>> edges) {
+        List<Integer> zero_indegree = new ArrayList<>();
+        HashSet<Integer> set = new HashSet<>();
+        for(int i=0;i<edges.size();i++){
+            set.add(edges.get(i).get(1));
+        }
+        for(int i=0;i<n;i++){
+            if(!set.contains(i)){
+                zero_indegree.add(i);
+            }  
+        }
+        return zero_indegree;
+    }
+}
