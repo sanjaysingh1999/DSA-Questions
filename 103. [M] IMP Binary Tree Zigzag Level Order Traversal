@@ -1,0 +1,68 @@
+Given the root of a binary tree, return the zigzag level order traversal of its nodes' values. (i.e., from left to right, then right to left for the next 
+level and alternate between).
+
+Example 1:
+
+Input: root = [3,9,20,null,null,15,7]
+Output: [[3],[20,9],[15,7]]
+
+Not optimal: 
+Idea: Use var to decide if we want to add it in l to r manner or r to l manner. Instead of boolean var we can use size of res list to find order of addition in list.
+Do normal bfs and decide order with size of res list.
+
+TC:O(n^2) SC:O(n)
+
+class Solution {
+    public List<List<Integer>> zigzagLevelOrder(TreeNode root) {
+        if(root==null) { return new ArrayList<>();}
+        List<List<Integer>> res = new ArrayList<>();
+        ArrayDeque<TreeNode> q = new ArrayDeque<>();
+        q.add(root);
+        while(!q.isEmpty()){
+            int size = q.size(); 
+            List<Integer> tmp = new ArrayList<>();
+            while(size>0){
+                TreeNode curr = q.remove();
+                if(res.size()%2==0){tmp.add(curr.val);}
+                else{tmp.add(0,curr.val);}
+
+                if(curr.left!=null){q.add(curr.left); }
+                if(curr.right!=null){q.add(curr.right); }
+                
+                size--;
+            }
+            res.add(tmp);
+        }
+        return res;
+
+    }
+}
+
+Optimal: same as above but only initialize arraylist already and replace element at index of list
+
+TC:O(n) SC:O(n)
+
+class Solution {
+    public List<List<Integer>> zigzagLevelOrder(TreeNode root) {
+        if(root==null) { return new ArrayList<>();}
+        List<List<Integer>> res = new ArrayList<>();
+        ArrayDeque<TreeNode> q = new ArrayDeque<>();
+        q.add(root);
+        while(!q.isEmpty()){
+            int size = q.size(); 
+            List<Integer> tmp = new ArrayList<>(size);
+            for(int i=0;i<size;i++){tmp.add(0);}
+            for(int i=0;i<size;i++){
+                TreeNode curr = q.remove();
+                if(res.size()%2==0){tmp.set(i,curr.val);}
+                else{tmp.set(tmp.size()-i-1,curr.val);}
+
+                if(curr.left!=null){q.add(curr.left); }
+                if(curr.right!=null){q.add(curr.right); }
+            }
+            res.add(tmp);
+        }
+        return res;
+
+    }
+}
