@@ -1,0 +1,28 @@
+Given an array of integers nums and an integer k. A continuous subarray is called nice if there are k odd numbers on it.
+
+Return the number of nice sub-arrays. 
+
+Example 1:
+
+Input: nums = [1,1,2,1,1], k = 3
+Output: 2
+Explanation: The only sub-arrays with 3 odd numbers are [1,1,2,1] and [1,2,1,1].
+
+Idea: We slide window till we don't get k odd count, we store count of k odd numbers in temp and make it 0 only if again going forward we find any odd number. 
+This makes sure that we are considering all possible combination [if number after our current window has even numbers].
+
+TC:O(n) SC:O(1)
+
+class Solution {
+    public int numberOfSubarrays(int[] nums, int k) {
+    int l=0,odd_count=0,res=0,temp=0; //temp tells if later all even are there then its not 0
+        for(int r=0;r<nums.length;r++){
+            if(nums[r]%2==1){odd_count++;temp=0;}
+            while(odd_count==k){
+                temp++; if(nums[l]%2==1){odd_count--;} l++;
+            }
+            res+=temp;
+        }
+        return res;
+    }
+}
