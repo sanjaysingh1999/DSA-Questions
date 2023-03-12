@@ -1,0 +1,40 @@
+Given an n x n binary matrix grid, return the length of the shortest clear path in the matrix. If there is no clear path, return -1.
+
+A clear path in a binary matrix is a path from the top-left cell (i.e., (0, 0)) to the bottom-right cell (i.e., (n - 1, n - 1)) such that:
+
+All the visited cells of the path are 0.
+All the adjacent cells of the path are 8-directionally connected (i.e., they are different and they share an edge or a corner).
+The length of a clear path is the number of visited cells of this path.
+
+Example 1:
+
+Input: grid = [[0,1],[1,0]]
+Output: 2
+
+Idea: Do Dijikstra [BFS] and add neighbour to queue with increasing length by 1. 
+Do not add visited twice so maintain a array for that but we have to analyse its neighbour to so don't skip analysis just don't add it to queue.
+
+TC:O(n^2) SC:O(n^2)
+
+class Solution {
+    public int shortestPathBinaryMatrix(int[][] grid) {
+        ArrayDeque<int[]> q = new ArrayDeque<>(); //r,c,length
+        int n = grid.length; int[][]visited = new int [n][n];
+        int [][] dir = new int[][] {{0,1},{1,0},{1,1},{0,-1},{-1,0},{-1,-1},{-1,1},{1,-1}};
+        q.add(new int[]{0,0,1});visited[0][0]=1;
+        while(!q.isEmpty()){
+            int [] temp = q.poll(); int r=temp[0],c=temp[1],length=temp[2];
+            if(grid[r][c]==1 || Math.min(r,c)<0 || Math.max(r,c)==n){continue;}
+            if(r==n-1 && c==n-1){return length;}
+
+            for(int []d :dir){
+                int dr=d[0],dc=d[1];
+                if(Math.min(r+dr,c+dc)>=0 && Math.max(r+dr,c+dc)<n && visited[r+dr][c+dc]!=1){
+                    q.add(new int[]{r+dr,c+dc,length+1});
+                    visited[r+dr][c+dc]=1;
+                }
+            }
+        }
+        return -1;
+    }
+}
