@@ -1,0 +1,77 @@
+Desc: https://leetcode.com/problems/game-of-life/description/
+
+Not optimal:
+
+Idea: Check neighbours of cell & update acc to condition. Make new array to check neighbour as curr array would be updated.
+
+TC:O(8*n*n) SC:O(n*n)
+
+class Solution {
+    public void gameOfLife(int[][] board) {
+        int [][] dir = new int[][]{{-1,1},{1,1},{1,0},{0,1},{-1,-1},{-1,0},{0,-1},{1,-1}};
+        int r=board.length,c=board[0].length;int [][] Neighbour = new int[r][c];
+        for(int i=0;i<r;i++){
+            for(int j=0;j<c;j++){
+                Neighbour[i][j]=board[i][j];
+            }
+        }
+        for(int i=0;i<r;i++){
+            for(int j=0;j<c;j++){
+                int cell = board[i][j],neighbour=0;
+                for(int []d:dir){
+                int dir_r=i+d[0], dir_c=j+d[1];
+                if(dir_r<0 || dir_r==r || dir_c<0 || dir_c==c){continue;}
+                if(i==1 && j==0){System.out.print(dir_r+":"+dir_c+" ");}
+                if(Neighbour[dir_r][dir_c]==1){
+                    neighbour++;
+                    }
+                }
+                if(cell==0 && neighbour==3){
+                    board[i][j]=1;
+                }
+                else if(cell==1){
+                    if(neighbour==2 || neighbour==3){board[i][j]=1;} //alive nxt stg
+                    else if(neighbour>3 || neighbour<2){board[i][j]=0;} //dead
+                }
+            }
+        }
+    }
+}
+
+Optimal: Use helper function to find neighbours count. Make 1 to 0[but die var value i.e 2] so that 
+when counting neighbour if 1/die we know it is/was 1 value previously.
+
+TC:O(mn) SC:O(1)
+
+class Solution {
+    public void gameOfLife(int[][] board) {
+        int r=board.length,c=board[0].length, die=2,live=3;
+        for(int i=0;i<r;i++){
+            for(int j=0;j<c;j++){
+                int neighbour =around(board,i,j,die,live);
+                if(board[i][j]==0 && neighbour==3){board[i][j]=live;}
+                else if(board[i][j]==1){
+                    if(neighbour<2 || neighbour>3){board[i][j]=die;}
+                }    
+            }
+        }
+        for(int i=0;i<r;i++){
+            for(int j=0;j<c;j++){
+                if(board[i][j]==die){board[i][j]=0;}
+                else if(board[i][j]==live){board[i][j]=1;}
+            }
+        }
+    }
+    public int around(int[][]board,int i,int j, int die,int live){
+        int [][] dir = new int[][]{{-1,1},{1,1},{1,0},{0,1},{-1,-1},{-1,0},{0,-1},{1,-1}};
+        int r=board.length,c=board[0].length,neighbour=0;
+        for(int []d:dir){
+            int dir_r=i+d[0], dir_c=j+d[1];
+            if(dir_r<0 || dir_r==r || dir_c<0 || dir_c==c){continue;}
+            if(board[dir_r][dir_c]==1 || board[dir_r][dir_c]==die){
+                neighbour++;
+            }
+        }
+        return neighbour;
+    }
+}
