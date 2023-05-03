@@ -1,0 +1,36 @@
+Desc: https://leetcode.com/problems/flower-planting-with-no-adjacent/description/
+
+Idea: Check connected nodes with curr node and remove color avail for curr node if its used by its connected nodes i.e BFS. 
+
+TC:O(V*E) SC:O(V*E)
+
+class Solution {
+    public int[] gardenNoAdj(int n, int[][] paths) {
+        HashMap<Integer,ArrayList<Integer>> graph = new HashMap<>();
+        int [] res = new int[n];
+        for(int [] arr:paths){
+            ArrayList<Integer> temp = graph.getOrDefault(arr[0],new ArrayList<Integer>());
+            temp.add(arr[1]);
+            graph.put(arr[0],temp);
+            temp = graph.getOrDefault(arr[1],new ArrayList<Integer>());
+            temp.add(arr[0]);
+            graph.put(arr[1],temp);
+        }
+        for(int i=1;i<=n;i++){
+            int [] color = new int[5];
+            if(graph.containsKey(i)){
+                for( int curr_node : graph.get(i)){
+                    color[res[curr_node-1]] =1;
+                }
+            }
+
+            for(int k=1;k<5;k++){
+                if(color[k]==0){
+                    res[i-1]=k; 
+                    break;
+                }
+            }
+        }
+        return res;
+    }
+}
