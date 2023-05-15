@@ -1,0 +1,28 @@
+You are given a 0-indexed integer array nums of length n and an integer k. In an operation, you can choose an element and multiply it by 2.
+
+Return the maximum possible value of nums[0] | nums[1] | ... | nums[n - 1] that can be obtained after applying the operation on nums at most k times.
+
+Note that a | b denotes the bitwise or between two integers a and b. 
+Example 1:
+
+Input: nums = [12,9], k = 1
+Output: 30
+Explanation: If we apply the operation to index 1, our new array nums will be equal to [12,18]. Thus, we return the bitwise or of 12 and 18, which is 30.
+
+Idea: Multiply single num by 2^k as that would give max result. For doing OR instead of repeatedly doing it, have prefixsum & suffixsum of Or for each index.
+TC:O(n) SC:O(n)
+class Solution {
+    public long maximumOr(int[] nums, int k) {
+        long max=0; int n=nums.length;
+        int [] prefixSum = new int [n]; int [] suffixSum = new int[n];
+        prefixSum[0]=nums[0]; suffixSum[n-1]=nums[n-1];
+        for(int i=1;i<n;i++){prefixSum[i]= prefixSum[i-1] |nums[i] ;}
+        for(int i=n-2;i>=0;i--){suffixSum[i]= suffixSum[i+1] |nums[i] ;}
+        for(int i=0;i<n;i++){
+            long or = ((long)(nums[i]) * (1L<<k)) |
+             (i>0? prefixSum[i-1]:0) | (i<n-1?suffixSum[i+1]:0) ;
+            max= Math.max(max,or);
+        }
+        return max;
+    }
+}
