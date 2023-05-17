@@ -1,0 +1,42 @@
+Idea: Do dfs and find no. of components. We need to join these components only so ans is no. of comp -1.
+
+
+There are n computers numbered from 0 to n - 1 connected by ethernet cables connections forming a network where connections[i] = [ai, bi] represents a connection 
+between computers ai and bi. Any computer can reach any other computer directly or indirectly through the network.
+You are given an initial computer network connections. You can extract certain cables between two directly connected computers, and place them between any pair 
+of disconnected computers to make them directly connected.
+Return the minimum number of times you need to do this in order to make all the computers connected. If it is not possible, return -1.
+
+Example 1:
+Input: n = 4, connections = [[0,1],[0,2],[1,2]]
+Output: 1
+Explanation: Remove cable between computer 1 and 2 and place between computers 1 and 3.
+
+TC: O(n+m) n=no. of nodes,m=no. of connections SC:O(n)
+
+class Solution {
+    public int makeConnected(int n, int[][] connections) {
+        if(connections.length < n-1) return -1;
+        ArrayList<Integer> [] graph = new ArrayList[n]; 
+        boolean visited [] = new boolean[n]; int component=0;
+        for(int i=0;i<n;i++){graph[i] = new ArrayList<>();}
+        for(int [] arr: connections){
+            graph[arr[0]].add(arr[1]);graph[arr[1]].add(arr[0]);
+        } 
+        for(int i=0;i<n;i++){
+            if(!visited[i]){
+                component++; dfs(graph,visited,i);
+            }
+        }
+        return component-1;
+    }
+    public void dfs(ArrayList<Integer> [] graph, boolean[] visited, int node){
+        if(visited[node]) return;
+        visited[node]=true;
+        for(int n:graph[node]){
+            if(!visited[n]){
+                dfs(graph,visited,n);
+            }
+        }
+    }
+}
