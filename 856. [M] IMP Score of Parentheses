@@ -1,0 +1,32 @@
+Given a balanced parentheses string s, return the score of the string.
+
+The score of a balanced parentheses string is based on the following rule:
+
+"()" has score 1.
+AB has score A + B, where A and B are balanced parentheses strings.
+(A) has score 2 * A, where A is a balanced parentheses string.
+
+Example 1:
+Input: s = "()"
+Output: 1
+
+Soln 1: TCO(n) SC:O(n)
+Idea : Add ( to stack & when ) check if peek is ( or a number. If ( then add 1 to stack else if number then add all numbers till stk peek is (, multiply by 2 & add it to stack
+after removing last (. eg: ((())) -> ((1)) -> (2) ->4
+
+Soln 2: TC:O(n) SC:O(1)
+IDea: Calculate max depth till we find concurrent () then take pow of 2 to depth. Reduce depth for every ) bracket.
+
+class Solution {
+    public int scoreOfParentheses(String s) {
+      int depth=0,res=0;char prev=' ';
+      for(char c:s.toCharArray()){
+          if(c=='('){depth++;}
+          else {
+            depth--;if(prev=='('){ res+=Math.pow(2,depth);}
+          }
+          prev=c;
+      }
+      return res;
+    }
+}
