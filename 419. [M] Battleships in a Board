@@ -1,0 +1,49 @@
+Given an m x n matrix board where each cell is a battleship 'X' or empty '.', return the number of the battleships on board.
+
+Battleships can only be placed horizontally or vertically on board. In other words, they can only be made of the shape 1 x k (1 row, k columns) or k x 1 (k rows, 1 column), where k can be of any size. At least one horizontal or vertical cell separates between two battleships (i.e., there are no adjacent battleships).
+
+Example 1:
+Input: board = [["X",".",".","X"],[".",".",".","X"],[".",".",".","X"]]
+Output: 2
+
+Idea 1: Do dfs and mark visited & keep count for each dfs traversal. TC:O(m x n) SC:O(m+n)
+
+Idea 2: Traverse matrix and if X is found make it blank '' and all of its neighbour, keep count of X found. 
+TC:O(m x n) SC:O(1)
+
+class Solution {
+    public int countBattleships(char[][] board) {
+        int count=0,r=board.length,c=board[0].length;
+        for(int i=0;i<r;i++){
+            for(int j=0;j<c;j++){
+                if(board[i][j]=='X'){
+                    count++;
+                    int _r=i+1,_c=j+1;
+                    board[i][j]=' ';
+                    while(_r<r && board[_r][j]=='X'){board[_r][j]=' ';_r++;}
+                    while(_c<c && board[i][_c]=='X'){board[i][_c]=' ';_c++;}
+                }
+            }
+        }
+        return count;
+    }
+}
+
+Best Idea: Find first cell of each battleships by checking if its left & top is not 'X'
+TC:O(mxn) SC:O(1)
+
+class Solution {
+    public int countBattleships(char[][] board) {
+        int count=0,r=board.length,c=board[0].length;
+        for(int i=0;i<r;i++){
+            for(int j=0;j<c;j++){
+                if(board[i][j]=='.'){continue;}
+                if(i>0 && board[i-1][j]=='X'){continue;}
+                if(j>0 && board[i][j-1]=='X'){continue;}
+                count++;
+            }
+        }
+        return count;
+    }
+}
+
