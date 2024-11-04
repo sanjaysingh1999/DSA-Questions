@@ -1,0 +1,51 @@
+Q Link: https://leetcode.com/problems/contains-duplicate/description/
+
+Brute Force: 2 loops, check if a particular no. exists in inside loop. TC:O(n^2) SC:O(1) 
+
+Optimal Soln 1: Sort array and check if next value is same as current [Except last index, as if was duplicate it would have been check in it's prev index itself] 
+TC: O(nlogn) SC:O(1)
+
+class Solution {
+    public boolean containsDuplicate(int[] nums) {
+        Arrays.sort(nums);
+        for(int i=0;i<nums.length;i++){
+            if(i!= nums.length-1 && nums[i] == nums[i+1]){
+                return true;
+            }
+            
+        }
+        return false;
+    }
+}
+
+Optimal Solution 2: Add no. to hashmap and increase its freq by 1 everytime. TC:O(n) SC:O(n)
+
+class Solution {
+    public boolean containsDuplicate(int[] nums) {
+        Arrays.sort(nums);
+        for(int i=0;i<nums.length;i++){
+            if(i!= nums.length-1 && nums[i] == nums[i+1]){
+                return true;
+            }
+            
+        }
+        return false;
+    }
+}
+
+Optimal Solution 3: Same as above, just add to HashSet instead of Hashmap.
+
+class Solution {
+    public boolean containsDuplicate(int[] nums) {
+        HashSet <Integer> hs = new HashSet<Integer>();
+        for(int i=0;i<nums.length;i++){
+            if(hs.contains(nums[i])){
+                return true;
+            }
+            else{
+                hs.add(nums[i]);
+            }
+        }
+        return false;
+    }
+}
