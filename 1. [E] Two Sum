@@ -1,0 +1,19 @@
+Q Link : https://leetcode.com/problems/two-sum/description/
+
+Brute Force: Iterate 2 times and check for nums[i] : if nums[j]+nums[i] = target (where j starts i+1). TC:O(n^2) SC:O(1)
+
+Optimal: Add target-nums[i] into hashmap along with index. Now, check for each no. if that particular no. is already there in HM, 
+this means we already have scanned no. which when added with this no. sums to target.
+
+TC:O(n) SC:O(n)
+
+class Solution {
+    public int[] twoSum(int[] nums, int target) {
+        HashMap<Integer,Integer> map = new HashMap<>();
+        for(int i=0;i<nums.length;i++){
+            if(map.containsKey(nums[i])) { return new int [] {i,map.get(nums[i])}; }
+            map.put(target - nums[i], i);
+        }
+        return new int [] {};
+    }
+}
