@@ -11,7 +11,31 @@ Output: ["()"]
 Idea: add open ( to stk if open count < n & add close ) to stk if close count < open. Recursively do this and if openc=closec==n then 
 iterator over stack and add to res[].
 
+Backtrack example: ((())) => (( )()) => ....
 
+TC:O(2^N) SC:O(N),  N=length of valid parenthesis.
+class Solution {
+    public List<String> generateParenthesis(int n) {
+        List<String> res = new  ArrayList<>();
+        String current="";
+        generateParentheses_(res,current,0,0,n);
+        return res;
+    }
+    public void generateParentheses_(List<String> res, String current, int open, int close, int n){
+        if(open==n && close==n){
+            res.add(current); return;
+        }
+        if(open<n){
+            generateParentheses_(res,current+"(", open+1, close, n);
+        }
+        if(close <open){
+            generateParentheses_(res,current+")", open, close+1, n);
+        }
+    }
+}
+
+============================================= Old Solution 👇 ===================================
+SC: O(N) TC:O(2^N) N=length of valid parenthesis.
 import java.util.*;
 class Solution {
     public static void main(String args[]){
