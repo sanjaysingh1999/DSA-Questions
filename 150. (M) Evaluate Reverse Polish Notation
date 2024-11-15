@@ -16,6 +16,29 @@ Idea: Push number to stk & on operator pop 2 num and do operation.
 
 class Solution {
     public int evalRPN(String[] tokens) {
+        ArrayDeque<Integer> stk = new ArrayDeque<>();
+        for(int i=0;i<tokens.length;i++){
+            String c = tokens[i];
+            if(!c.equals("+") && !c.equals("-") && !c.equals("*") && !c.equals("/"))
+            { stk.push(Integer.parseInt(c)); }
+            else{
+                int num2=stk.pop(), num1=stk.pop(),cal=0;
+                switch (c){
+                    case "+": cal= num1 + num2; break;
+                    case "-": cal= num1 - num2; break;
+                    case "*": cal= num1 * num2; break;
+                    case "/": cal= num1 / num2; break;
+                }
+                stk.push(cal);
+            }
+        }
+        return stk.peek();
+    }
+}
+
+======================= Old Code 👇 ==========================
+class Solution {
+    public int evalRPN(String[] tokens) {
        Stack<Integer> stk = new Stack<>();
         for(String token:tokens){
                 if(token.equals("+")){
