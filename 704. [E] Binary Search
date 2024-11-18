@@ -1,0 +1,16 @@
+Simple Binary Search. TC:O(logn) SC:O(1)
+For mid calculation use mid = low + (high-low) /2 -> this solves integer overflow issue if no.s are very big.
+
+
+class Solution {
+    public int search(int[] nums, int target) {
+        int start=0,end=nums.length-1,mid;
+        while(start<=end){
+            mid = start+(end-start)/2;
+            if( nums[mid] == target ) { return mid;}
+            else if(nums[mid] < target){start = mid+1;}
+            else{ end = mid-1;}
+        }
+        return -1;
+    }
+}
