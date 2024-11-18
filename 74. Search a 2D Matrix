@@ -22,7 +22,35 @@ class Solution {
     }
 }
 
-Optimal : Log(M)*Log(N)
+Optimal : Log(M*N)
+Idea: do binary search for getting the correct row num then in that row do binary search to get key.
+class Solution {
+    public boolean searchMatrix(int[][] matrix, int target) {
+       int target_col = -1,start=0,end=matrix.length-1,n=matrix[0].length;
+       while(start<=end){
+        int mid = start + (end-start) /2 ;
+        if(matrix[mid][0] == target || matrix[mid][n-1] == target){return true;}
+        else if(matrix[mid][0] < target  && matrix[mid][n-1] > target){target_col=mid;break;}
+        else if(matrix[mid][0] > target){ end = mid-1;}
+        else{start=mid+1;}
+       }
+        start=0; end=n-1;
+        while(start<=end && target_col!=-1){
+            int mid  = start + (end-start) /2 ;
+            if(matrix[target_col][mid] == target){return true;}
+            else if(matrix[target_col][mid] < target) {start = mid+1;}
+            else{end = mid-1;}
+        }
+        return false;
+    }
+}
+
+
+
+
+
+========================== OLD Solution ============================================
+Optimal (same as above optimal) : Log(M*N)
 Idea: do binary search for getting the correct row num then in that row do binary search to get key.
 
 class Solution {
