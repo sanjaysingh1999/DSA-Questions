@@ -14,7 +14,26 @@ Output: 4
 Idea: Do Binary search from 1 to max(banana in a pile)  in order to find ideal eating rate. If found rate<=h store it in res and move right=mid-1 else rate>h inc
 rate by moving left=mid+1
 
-TC:O(Log(max(piles))*n) n-->piles length
+TC:O( Log(max(piles))*n ) n-->piles length,
+
+class Solution {
+    public int minEatingSpeed(int[] piles, int h) {
+        int left=1,right=Arrays.stream(piles).max().getAsInt(),res=right;
+        if(piles.length == h) return right;
+        while(left<=right){
+            int mid = left + (right-left) / 2, count =0;
+            for(int i=0;i<piles.length;i++){
+             count += Math.ceil((double)piles[i]/mid);
+            }
+            if(count<=h){res=mid;right=mid-1;}
+            else{left = mid+1;}
+        }
+        return res;
+    }
+}
+
+========================== OLD SOLUTION ==========================
+TC:O( Log(max(piles))*n ) n-->piles length
 class Solution {
     public int minEatingSpeed(int[] piles, int h) {
      int max=Integer.MIN_VALUE;   
