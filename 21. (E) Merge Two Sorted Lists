@@ -1,5 +1,6 @@
-21. Merge Two Sorted Lists
+Desc Link: https://leetcode.com/problems/merge-two-sorted-lists/submissions/1466621457/
 
+TC:O(n+m) SC:O(n+m)
 /**
  * Definition for singly-linked list.
  * public class ListNode {
@@ -10,6 +11,26 @@
  *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
  * }
  */
+
+class Solution {
+    public ListNode mergeTwoLists(ListNode list1, ListNode list2) {
+        ListNode curr1 = list1, curr2 = list2, res=new ListNode(),head=res;
+        while(curr1!=null && curr2!=null){
+            if(curr1.val<=curr2.val){
+                res.next= new ListNode(curr1.val);
+                curr1=curr1.next;}
+            else{
+                res.next= new ListNode(curr2.val);
+                curr2=curr2.next;}
+            res=res.next;
+        }
+        res.next = curr1!=null ? curr1:curr2;
+        return head.next;
+    }
+}
+
+======================== Old Soln ==================================
+Below soln modifies original LL but has TC:O(n+m) SC:O(1)
 class Solution {
     public ListNode mergeTwoLists(ListNode list1, ListNode list2) {
         ListNode root = new ListNode();
